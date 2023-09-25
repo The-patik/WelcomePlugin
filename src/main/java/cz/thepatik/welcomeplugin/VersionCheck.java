@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class VersionCheck {
 
-    public static String pluginVersion = "alpha-0.1";
+    public static String pluginVersion = "0.1-alpha";
 
     public static boolean versionCheck() {
         if (pluginVersion == getCurrentOnlineVersion) {
