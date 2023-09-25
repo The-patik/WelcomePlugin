@@ -39,7 +39,7 @@ public final class WelcomePlugin extends JavaPlugin {
         //If config exists...
           else {
             //Check version
-            if (!versionCheck()) {
+            if (versionCheck()) {
                 getLogger().warning("There is a new version! Check GitHub!");
             } else {
                 getLogger().info("The plugin is up to date!");
