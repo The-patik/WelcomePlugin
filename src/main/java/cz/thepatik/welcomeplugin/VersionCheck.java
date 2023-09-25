@@ -8,7 +8,9 @@ public class VersionCheck {
     public static String pluginVersion = "alpha-0.1";
 
     public static boolean versionCheck() {
-        if (pluginVersion == )
+        if (pluginVersion == ) {
+
+        }
     }
 
     private static String getCurrentOnlineVersion() {
