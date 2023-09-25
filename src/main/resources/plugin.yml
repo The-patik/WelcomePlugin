@@ -1,0 +1,4 @@
+name: Welcome Plugin
+version: '${project.version}'
+main: cz.thepatik.welcomeplugin.WelcomePlugin
+api-version: '1.20'
