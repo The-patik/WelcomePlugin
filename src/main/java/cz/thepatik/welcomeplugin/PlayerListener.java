@@ -2,10 +2,7 @@ package cz.thepatik.welcomeplugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.injector.BukkitUnwrapper;
-import com.comphenix.protocol.reflect.FuzzyReflection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,24 +13,20 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PlayerListener implements Listener {
 
-    public void displayCredits(Player player) throws IllegalArgumentException, InvocationTargetException, IllegalAccessException {
-        BukkitUnwrapper unwrapper = new BukkitUnwrapper();
-        Object nms = unwrapper.unwrapItem(player);
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.GAME_STATE_CHANGE);
+    public void displayCredits(Player player) throws InvocationTargetException {
+        PacketContainer useBed = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
+        useBed.getGameStateIDs().write(0, 4);
+        useBed.getFloat().write(0, 1f);
 
-        packet.getIntegers().
-                write(0, 4).
-                write(1, 0);
-        FuzzyReflection.fromObject(nms).getFieldByName("viewingCredits").set(nms, true);
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, useBed);
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) throws InvocationTargetException, IllegalAccessException {
-        if (event.getPlayer().hasPlayedBefore()) {
+    public void onPlayerJoin(PlayerJoinEvent event) throws InvocationTargetException {
+        if (!event.getPlayer().hasPlayedBefore()) {
             displayCredits(event.getPlayer());
+        } else {
+            // There will be action bar or screen message
         }
     }
 
