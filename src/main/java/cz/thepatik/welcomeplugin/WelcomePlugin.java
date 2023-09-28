@@ -6,9 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
-import static cz.thepatik.welcomeplugin.VersionCheck.pluginVersion;
-import static cz.thepatik.welcomeplugin.VersionCheck.versionCheck;
+import static cz.thepatik.welcomeplugin.VersionCheck.*;
 
 public final class WelcomePlugin extends JavaPlugin {
 
@@ -51,10 +52,14 @@ public final class WelcomePlugin extends JavaPlugin {
                 onDisable();
             }
             //Check version
-            if (versionCheck()) {
-                getLogger().warning("There is a new version! Check GitHub!");
-            } else {
+            if (Objects.equals(pluginVersion, getCurrentOnlineVersion())) {
                 getLogger().info("The plugin is up to date!");
+                getLogger().info("Plugin version: " + pluginVersion);
+                getLogger().info("Online version:" + getCurrentOnlineVersion());
+            } else {
+                getLogger().warning("There is a new version! Check GitHub!");
+                getLogger().info("Plugin version: " + pluginVersion);
+                getLogger().info("Online version: " + getCurrentOnlineVersion());
             }
             protocolManager = ProtocolLibrary.getProtocolManager();
             this.getConfig().set("pluginVersion", pluginVersion);
