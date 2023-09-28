@@ -7,7 +7,7 @@
   * /welcome update - Checks for update
   * /welcome version - Shows installed version of plugin
   * ~~/welcome showcreditsto [who] - Change option to who show credits (Now only for everyone or newcomers)~~
-* ~~Added option in config to display credits(or whatever you want) to newcomers~~
+* Added option in config to display credits(or whatever you want) to newcomers
 * Added permissions to commands
 
 
