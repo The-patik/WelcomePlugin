@@ -8,8 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.logging.Logger;
 
-import static cz.thepatik.welcomeplugin.VersionCheck.getCurrentOnlineVersion;
-import static cz.thepatik.welcomeplugin.VersionCheck.pluginVersion;
+import static cz.thepatik.welcomeplugin.VersionCheck.*;
 import static java.lang.Double.parseDouble;
 
 public final class WelcomePlugin extends JavaPlugin {
@@ -56,15 +55,13 @@ public final class WelcomePlugin extends JavaPlugin {
             //Check version
             if (pluginVersion == parseDouble(getCurrentOnlineVersion())) {
                 getLogger().info("The plugin is up to date!");
-                getLogger().info("Plugin version: " + pluginVersion);
-                getLogger().info("Online version:" + getCurrentOnlineVersion());
             } else {
                 getLogger().warning("There is a new version! Check GitHub!");
-                getLogger().info("Plugin version: " + pluginVersion);
-                getLogger().info("Online version: " + getCurrentOnlineVersion());
+                getLogger().info("Plugin version: " + pluginVersion + pluginVersionStage);
+                getLogger().info("Updated version: " + getCurrentOnlineVersion()+ pluginVersionStage);
             }
             protocolManager = ProtocolLibrary.getProtocolManager();
-            this.getConfig().set("pluginVersion", pluginVersion);
+            this.getConfig().set("pluginVersion", pluginVersion + pluginVersionStage);
             this.saveConfig();
             //Finally the plugin is loaded...
             getLogger().info("The plugin is loaded!");

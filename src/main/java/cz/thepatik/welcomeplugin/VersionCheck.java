@@ -9,11 +9,12 @@ import java.net.URL;
 public class VersionCheck {
 
     public static double pluginVersion = 0.3;
+    public static String pluginVersionStage = "-alpha";
 
     public static String getCurrentOnlineVersionString() throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
-        URL url = new URL("https://raw.githubusercontent.com/The-patik/WelcomePlugin/master/pluginVersion.txt");
+        URL url = new URL("https://raw.githubusercontent.com/The-patik/WelcomePlugin/master/pluginVersion.number");
 
         try (InputStream in = url.openStream()) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
