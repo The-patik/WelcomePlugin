@@ -3,3 +3,17 @@ version: '${project.version}'
 main: cz.thepatik.welcomeplugin.WelcomePlugin
 api-version: '1.20'
 depend: [ ProtocolLib ]
+commands:
+  welcome:
+    description: Welcome plugin command
+    permission: welcomeplugin.*
+  permissions:
+    welcomeplugin.help:
+      description: Allows to show help using /welcome help
+      default: op
+    welcomeplugin.update:
+      description: Allows to check for updates using /welcome update
+      default: op
+    welcomeplugin.version:
+      description: Allows to show plugin version using /welcome version
+      default: op

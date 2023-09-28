@@ -3,15 +3,25 @@ package cz.thepatik.welcomeplugin;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 
 
 public class PlayerListener implements Listener {
+
+   private final WelcomePlugin plugin;
+
+   public PlayerListener(WelcomePlugin plugin){
+       this.plugin = plugin;
+   }
+
 
     public void displayCredits(Player player) throws InvocationTargetException {
         PacketContainer useBed = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
@@ -23,11 +33,22 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws InvocationTargetException {
-        if (!event.getPlayer().hasPlayedBefore()) {
+        String configShowCredits = this.plugin.getConfig().getString("show-credits");
+        String mainTitleMessage = this.plugin.getConfig().getString("main-title-message");
+        String subTitleMessage = this.plugin.getConfig().getString("subtitle-message");
+
+        if (Objects.equals(configShowCredits, "newcomers")) {
+            if (!event.getPlayer().hasPlayedBefore()) {
+                displayCredits(event.getPlayer());
+            }
+        } else if (Objects.equals(configShowCredits, "everyone")) {
             displayCredits(event.getPlayer());
-        } else {
-            // There will be action bar or screen message
         }
+
+        if (this.plugin.getConfig().getBoolean("enable-titles")) {
+            event.getPlayer().sendTitle(mainTitleMessage, subTitleMessage, 20, 100, 20);
+        }
+
     }
 
 }

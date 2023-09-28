@@ -1,0 +1,15 @@
+#Show credits for newcomers or to everyone
+#SET ONLY newcomers OR everyone
+show-credits: newcomers
+
+#Active titles
+enable-titles: true
+
+#Main title message
+main-title-message: "Welcome %player%!"
+
+#Subtitle message
+subtitle-message: "Hey, you connected %connected% times! Than you!"
+
+#Please do not touch this
+plugin-version:
