@@ -5,11 +5,9 @@ import cz.thepatik.welcomeplugin.commands.subcommands.HelpCommand;
 import cz.thepatik.welcomeplugin.commands.subcommands.ShowCreditsToCommand;
 import cz.thepatik.welcomeplugin.commands.subcommands.UpdateCommand;
 import cz.thepatik.welcomeplugin.commands.subcommands.VersionCommand;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,9 +39,17 @@ public class CommandManager implements CommandExecutor, TabExecutor {
                 }
             } else if (args.length == 0){
                 TextComponent welcomeHelpMessage = new TextComponent("/welcome help");
+                welcomeHelpMessage.setColor(ChatColor.RED);
+                welcomeHelpMessage.setBold(false);
+                welcomeHelpMessage.setFont("minecraft:uniform");
                 welcomeHelpMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/welcome help"));
                 welcomeHelpMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click & run command").create()));
-                p.sendMessage(ChatColor.RED + "You must specify a subcommand! For list of commands write" + welcomeHelpMessage);
+
+                TextComponent welcomeHelpMessageFirst = new TextComponent("You must specify a subcommand! For list of commands write ");
+                welcomeHelpMessage.setColor(ChatColor.RED);
+                welcomeHelpMessage.setBold(false);
+                welcomeHelpMessage.setFont("minecraft:uniform");
+               sender.spigot().sendMessage(welcomeHelpMessageFirst, welcomeHelpMessage);
             }
         }
         return true;
