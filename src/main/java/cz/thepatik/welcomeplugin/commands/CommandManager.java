@@ -1,6 +1,8 @@
 package cz.thepatik.welcomeplugin.commands;
 
+import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.subcommands.HelpCommand;
+import cz.thepatik.welcomeplugin.commands.subcommands.ShowCreditsToCommand;
 import cz.thepatik.welcomeplugin.commands.subcommands.UpdateCommand;
 import cz.thepatik.welcomeplugin.commands.subcommands.VersionCommand;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -19,13 +21,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class CommandManager implements CommandExecutor, TabExecutor {
-
     private ArrayList<SubCommand> subcommands = new ArrayList<>();
 
     public CommandManager(){
         subcommands.add(new UpdateCommand());
         subcommands.add(new VersionCommand());
         subcommands.add(new HelpCommand());
+        subcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
     }
 
     @Override

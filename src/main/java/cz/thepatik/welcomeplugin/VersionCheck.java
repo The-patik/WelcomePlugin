@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class VersionCheck {
 
-    public static double pluginVersion = 0.3;
+    public static double pluginVersion = 0.4;
     public static String pluginVersionStage = "-alpha";
 
     public static String getCurrentOnlineVersionString() throws IOException {

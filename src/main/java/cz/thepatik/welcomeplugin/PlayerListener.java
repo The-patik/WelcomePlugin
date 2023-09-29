@@ -3,8 +3,8 @@ package cz.thepatik.welcomeplugin;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,9 +33,15 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws InvocationTargetException {
-        String configShowCredits = this.plugin.getConfig().getString("show-credits");
-        String mainTitleMessage = this.plugin.getConfig().getString("main-title-message");
-        String subTitleMessage = this.plugin.getConfig().getString("subtitle-message");
+        ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
+
+        String configShowCredits = cs.getString("show-credits");
+        String mainTitleMessage = cs.getString("main-title-message");
+        String subTitleMessage = cs.getString("subtitle-message");
+
+        //Make PlaceholderAPI do its job
+        mainTitleMessage = PlaceholderAPI.setPlaceholders(event.getPlayer(), mainTitleMessage);
+        subTitleMessage = PlaceholderAPI.setPlaceholders(event.getPlayer(), subTitleMessage);
 
         if (Objects.equals(configShowCredits, "newcomers")) {
             if (!event.getPlayer().hasPlayedBefore()) {
@@ -45,7 +51,7 @@ public class PlayerListener implements Listener {
             displayCredits(event.getPlayer());
         }
 
-        if (this.plugin.getConfig().getBoolean("enable-titles")) {
+        if (cs.getBoolean("enable-titles")) {
             event.getPlayer().sendTitle(mainTitleMessage, subTitleMessage, 20, 100, 20);
         }
 

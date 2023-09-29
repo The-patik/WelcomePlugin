@@ -6,14 +6,15 @@ import cz.thepatik.welcomeplugin.commands.CommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 import static cz.thepatik.welcomeplugin.VersionCheck.*;
 import static java.lang.Double.parseDouble;
 
 public final class WelcomePlugin extends JavaPlugin {
+
+    private static WelcomePlugin plugin;
+
     public static Logger logger;
     private ProtocolManager protocolManager;
 
@@ -32,12 +33,21 @@ public final class WelcomePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        plugin = this;
+
         // Plugin startup logic
         this.saveDefaultConfig();
 
         //Check ProtocolLibs
         if (getServer().getPluginManager().getPlugin("ProtocolLib") == null) {
             getLogger().warning("This plugin needs ProtocolLib in order to work!");
+            getLogger().warning("Disabling the plugin...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            onDisable();
+        } //Check PlaceholderAPI
+        else if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
             getLogger().warning("Disabling the plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
             onDisable();
@@ -55,6 +65,9 @@ public final class WelcomePlugin extends JavaPlugin {
 
         //Register ProtocolLib
         protocolManager = ProtocolLibrary.getProtocolManager();
+
+        //Register PlaceholderAPI
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 
         String pluginVersionConfig = pluginVersion + pluginVersionStage;
 
@@ -74,4 +87,9 @@ public final class WelcomePlugin extends JavaPlugin {
         // Plugin shutdown logic
         getLogger().info("The plugin was successfully unloaded!");
     }
+
+    public static WelcomePlugin getPlugin(){
+        return plugin;
+    }
+
 }

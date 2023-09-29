@@ -1,15 +1,19 @@
-#Show credits for newcomers or to everyone
-#SET ONLY newcomers OR everyone
-show-credits: newcomers
+#Please, be patient, the plugin is still in development, and it is possible you will lose your config during updates.
+#so backup it before update.
+#
+#This plugin supports PlaceholderAPI!
 
-#Active titles
-enable-titles: true
+settings:
+  #Show credits for newcomers or to everyone
+  #SET ONLY newcomers OR everyone
+  show-credits: newcomers
 
-#Main title message
-main-title-message: "Welcome %player%!"
+  #Active titles
+  enable-titles: true
 
-#Subtitle message
-subtitle-message: "Hey, you connected %connected% times! Than you!"
+  #Main title message
+  main-title-message: Welcome!
 
-#Please do not touch this
+  #Subtitle message
+  subtitle-message: Hey, we are glad you came back!
 plugin-version:
