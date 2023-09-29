@@ -18,19 +18,6 @@ public final class WelcomePlugin extends JavaPlugin {
     public static Logger logger;
     private ProtocolManager protocolManager;
 
-    public File configFile() {
-        return new File(getDataFolder(), "config.yml");
-    }
-
-    public boolean fileExists(File filepath) {
-        File file = new File(String.valueOf(filepath));
-        if (file.exists()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     @Override
     public void onEnable() {
 
