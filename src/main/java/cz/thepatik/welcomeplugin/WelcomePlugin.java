@@ -3,9 +3,14 @@ package cz.thepatik.welcomeplugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
+import cz.thepatik.welcomeplugin.database.Database;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.io.File;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import static cz.thepatik.welcomeplugin.VersionCheck.*;
@@ -17,6 +22,8 @@ public final class WelcomePlugin extends JavaPlugin {
 
     public static Logger logger;
     private ProtocolManager protocolManager;
+
+    public static Database database;
 
     @Override
     public void onEnable() {
@@ -31,13 +38,11 @@ public final class WelcomePlugin extends JavaPlugin {
             getLogger().warning("This plugin needs ProtocolLib in order to work!");
             getLogger().warning("Disabling the plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
-            onDisable();
         } //Check PlaceholderAPI
         else if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
             getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
             getLogger().warning("Disabling the plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
-            onDisable();
         }
         //Check version
         if (pluginVersion == parseDouble(getCurrentOnlineVersion())) {
@@ -53,7 +58,7 @@ public final class WelcomePlugin extends JavaPlugin {
         //Register ProtocolLib
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        //Register PlaceholderAPI
+        //Register PlayerListener
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 
         String pluginVersionConfig = pluginVersion + pluginVersionStage;
@@ -64,15 +69,35 @@ public final class WelcomePlugin extends JavaPlugin {
             this.saveConfig();
         }
 
+        //Check if data folder exists
+        File dataFolder = new File(getDataFolder() + "/data");
+        if (!dataFolder.exists()){
+            dataFolder.mkdirs();
+        }
+
+        //Load database
+        try {
+            database = new Database(getDataFolder().getAbsolutePath() + "/data/database.db");
+        } catch (SQLException e) {
+            System.out.println("Connection to database failed");
+            e.printStackTrace();
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
         //Finally the plugin is loaded...
         getLogger().info("The plugin is loaded!");
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         getLogger().info("The plugin was successfully unloaded!");
+
+        try {
+            database.closeConnection();
+        } catch (SQLException e){
+            System.out.println("Just error...");
+        }
     }
 
     public static WelcomePlugin getPlugin(){

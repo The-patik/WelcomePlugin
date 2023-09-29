@@ -42,7 +42,9 @@ public class ShowCreditsToCommand extends SubCommand {
 
         if (player.hasPermission(getPermissions())){
             if (args.length == 1){
-                player.sendMessage(ChatColor.RED + "You must specify to who -" + ChatColor.DARK_GREEN + " newcomers" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " everyone");
+                String toWho = cs.getString("show-credits");
+                player.sendMessage(ChatColor.GREEN + "Now showing credits to: " + ChatColor.DARK_GREEN + toWho);
+                player.sendMessage(ChatColor.RED + "To edit you must specify to who -" + ChatColor.DARK_GREEN + " newcomers" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " everyone");
             } else if (args.length == 2){
                 String toWho = args[1];
 

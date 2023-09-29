@@ -1,15 +1,13 @@
 package cz.thepatik.welcomeplugin.commands;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.subcommands.HelpCommand;
-import cz.thepatik.welcomeplugin.commands.subcommands.ShowCreditsToCommand;
-import cz.thepatik.welcomeplugin.commands.subcommands.UpdateCommand;
-import cz.thepatik.welcomeplugin.commands.subcommands.VersionCommand;
+import cz.thepatik.welcomeplugin.commands.subcommands.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,8 +15,13 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CommandManager implements CommandExecutor, TabExecutor {
+    WelcomePlugin welcomePlugin;
+    private CommandManager(WelcomePlugin welcomePlugin){
+        this.welcomePlugin = welcomePlugin;
+    }
     private ArrayList<SubCommand> subcommands = new ArrayList<>();
 
     public CommandManager(){
@@ -26,10 +29,12 @@ public class CommandManager implements CommandExecutor, TabExecutor {
         subcommands.add(new VersionCommand());
         subcommands.add(new HelpCommand());
         subcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
+        subcommands.add(new PlayedTimeCommand());
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        String command = cmd.toString();
         if (sender instanceof Player){
             Player p = (Player) sender;
 

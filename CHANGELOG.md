@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5-beta
+* **Added SQLite database**
+* Counting players play time!
+* Going beta test and upload to spigot
+* Added counter of how many times player joined
+* Added command to show config to who now showing credits (showing on /welcome showcreditsto)
+
 ## 0.4-alpha
 * Added CommandManager
 * New commands added
@@ -10,7 +17,7 @@
 * Added option in config to display credits(or whatever you want) to newcomers
 * Added permissions to commands
 * Added PlaceholdersAPI hook - **NOW SUPPORTING PLACEHOLDERS!**
-* Changes made to config file - **Backup and delete it**
+* Changes made to config file - **Backup and delete it!**
 
 ## 0.3-alpha
 * Added onJoinEvent - when player joins first time, show credits

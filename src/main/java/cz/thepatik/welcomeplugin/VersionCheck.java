@@ -8,8 +8,8 @@ import java.net.URL;
 
 public class VersionCheck {
 
-    public static double pluginVersion = 0.4;
-    public static String pluginVersionStage = "-alpha";
+    public static double pluginVersion = 0.5;
+    public static String pluginVersionStage = "-beta";
 
     public static String getCurrentOnlineVersionString() throws IOException {
         StringBuilder sb = new StringBuilder();

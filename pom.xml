@@ -6,7 +6,7 @@
 
     <groupId>cz.thepatik</groupId>
     <artifactId>WelcomePlugin</artifactId>
-    <version>0.4-alpha</version>
+    <version>0.5-beta</version>
     <packaging>jar</packaging>
 
     <name>WelcomePlugin</name>
@@ -23,8 +23,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>15</source>
+                    <target>15</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -90,5 +90,14 @@
             <version>4.8.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.43.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+
     </dependencies>
 </project>
