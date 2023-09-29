@@ -1,6 +1,7 @@
 # Features planned
 
 ## soon - 0.6-beta
+* **~~Change credits to own text~~**
 * ~~Adding more commands for convenience config edits~~
 * ~~Maybe GUI menu :P~~
 * ~~Adding showcreditsto option to nobody~~
