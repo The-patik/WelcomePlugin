@@ -15,5 +15,5 @@ settings:
   main-title-message: Welcome!
 
   #Subtitle message
-  subtitle-message: Hey, we are glad you came back!
+  subtitle-message: Hey, %player_name% we are glad you came back!
 plugin-version:
