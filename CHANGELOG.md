@@ -6,6 +6,7 @@
 * Going beta test and upload to spigot
 * Added counter of how many times player joined
 * Added command to show config to who now showing credits (showing on /welcome showcreditsto)
+* Added command to show time spent playing on server
 
 ## 0.4-alpha
 * Added CommandManager
