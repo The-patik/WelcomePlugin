@@ -4,6 +4,9 @@ import cz.thepatik.welcomeplugin.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
+import java.util.List;
+
 public class HelpCommand extends SubCommand {
     @Override
     public String getName() {
@@ -23,6 +26,16 @@ public class HelpCommand extends SubCommand {
     @Override
     public String getSyntax() {
         return "/welcome help";
+    }
+
+    @Override
+    public boolean hasArguments() {
+        return false;
+    }
+
+    @Override
+    public List<String> tabComplete(String[] args) {
+        return Collections.emptyList();
     }
 
     @Override

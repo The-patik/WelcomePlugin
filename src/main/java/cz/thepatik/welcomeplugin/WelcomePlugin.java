@@ -4,16 +4,16 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
 import cz.thepatik.welcomeplugin.database.Database;
+import cz.thepatik.welcomeplugin.utils.handlers.PlayerHandler;
+import cz.thepatik.welcomeplugin.utils.handlers.ReloadHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import static cz.thepatik.welcomeplugin.VersionCheck.*;
+import static cz.thepatik.welcomeplugin.utils.VersionCheck.*;
 import static java.lang.Double.parseDouble;
 
 public final class WelcomePlugin extends JavaPlugin {
@@ -43,49 +43,55 @@ public final class WelcomePlugin extends JavaPlugin {
             getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
             getLogger().warning("Disabling the plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
-        }
-        //Check version
-        if (pluginVersion == parseDouble(getCurrentOnlineVersion())) {
-            getLogger().info("The plugin is up to date!");
         } else {
-            getLogger().warning("There is a new version! Check GitHub!");
-            getLogger().info("Plugin version: " + pluginVersion + pluginVersionStage);
-            getLogger().info("Updated version: " + getCurrentOnlineVersion()+ pluginVersionStage);
+            //Check version
+            if (pluginVersion == parseDouble(getCurrentOnlineVersion())) {
+                getLogger().info("The plugin is up to date!");
+            } else {
+                getLogger().warning("There is a new version! Check GitHub!");
+                getLogger().info("Plugin version: " + pluginVersion + pluginVersionStage);
+                getLogger().info("Updated version: " + getCurrentOnlineVersion() + pluginVersionStage);
+            }
+
+            //Register commands
+            getCommand("welcome").setExecutor(new CommandManager());
+
+            //Register ProtocolLib
+            protocolManager = ProtocolLibrary.getProtocolManager();
+
+            // Register Placeholders
+            new Placeholders(this).register();
+
+            //Register Handlers
+            Bukkit.getPluginManager().registerEvents(new PlayerHandler(this), this);
+            Bukkit.getPluginManager().registerEvents(new ReloadHandler(), this);
+
+            String pluginVersionConfig = pluginVersion + pluginVersionStage;
+
+            //Set version in config
+            if (!pluginVersionConfig.equals(this.getConfig().getString("plugin-version"))) {
+                this.getConfig().set("plugin-version", pluginVersion + pluginVersionStage);
+                this.saveConfig();
+            }
+
+            //Check if data folder exists
+            File dataFolder = new File(getDataFolder() + "/data");
+            if (!dataFolder.exists()) {
+                dataFolder.mkdirs();
+            }
+
+            //Load database
+            try {
+                database = new Database(getDataFolder().getAbsolutePath() + "/data/database.db");
+            } catch (SQLException e) {
+                System.out.println("Connection to database failed!");
+                Bukkit.getPluginManager().disablePlugin(this);
+                throw new RuntimeException(e);
+            }
+
+            //Finally the plugin is loaded...
+            getLogger().info("The plugin is loaded!");
         }
-        //Register commands
-        getCommand("welcome").setExecutor(new CommandManager());
-
-        //Register ProtocolLib
-        protocolManager = ProtocolLibrary.getProtocolManager();
-
-        //Register PlayerListener
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
-
-        String pluginVersionConfig = pluginVersion + pluginVersionStage;
-
-        //Set version in config
-        if (!pluginVersionConfig.equals(this.getConfig().getString("plugin-version"))) {
-            this.getConfig().set("plugin-version", pluginVersion + pluginVersionStage);
-            this.saveConfig();
-        }
-
-        //Check if data folder exists
-        File dataFolder = new File(getDataFolder() + "/data");
-        if (!dataFolder.exists()){
-            dataFolder.mkdirs();
-        }
-
-        //Load database
-        try {
-            database = new Database(getDataFolder().getAbsolutePath() + "/data/database.db");
-        } catch (SQLException e) {
-            System.out.println("Connection to database failed");
-            e.printStackTrace();
-            Bukkit.getPluginManager().disablePlugin(this);
-        }
-
-        //Finally the plugin is loaded...
-        getLogger().info("The plugin is loaded!");
     }
 
     @Override
@@ -96,7 +102,7 @@ public final class WelcomePlugin extends JavaPlugin {
         try {
             database.closeConnection();
         } catch (SQLException e){
-            System.out.println("Just error...");
+            System.out.println("Error when closing database connection");
         }
     }
 

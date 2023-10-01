@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.6-beta
+* **Change credits to own text**
+* Added showcreditsto option - nobody
+* Added better Played Time showing - Days, hours, minutes, seconds
+* Added new plugin placeholders:
+  * Added placeholder for PlayTime ***%WelcomePlugin_played_time%***
+  * Added placeholder for PlayerJoins ***%WelcomePlugin_player_joins%***
+  * Added placeholder for PlayerJoins of player ***%WelcomePlugin_player_< playerName>_joins%***
+* New commands:
+  * Added command **/welcome playerjoins** - Shows count of joins of executing player
+  * Added command **/welcome playerjoins *< who>*** - Shows count of joins of specified player
+* Added tabcomplete for command showcreditsto
+* Added tabcomplete for command playerjoins
+* Added ReloadHandler - kick all players after /reload command executed to avoid problems
+* Repaired PlayerID not autoincrement integer
+
 ## 0.5-beta
 * **Added SQLite database**
 * Counting players play time!
@@ -13,7 +29,7 @@
     * /welcome help - Shows list of commands
     * /welcome update - Checks for update
     * /welcome version - Shows installed version of plugin
-    * /welcome showcreditsto [who] - Change option to who show credits (Now only for everyone or newcomers)
+    * /welcome showcreditsto < who> - Change option to who show credits (Now only for everyone or newcomers)
 * Added option in config to display credits(or whatever you want) to newcomers
 * Added permissions to commands
 * Added PlaceholdersAPI hook - **NOW SUPPORTING PLACEHOLDERS!**

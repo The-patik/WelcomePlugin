@@ -8,7 +8,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import static cz.thepatik.welcomeplugin.VersionCheck.*;
+import java.util.Collections;
+import java.util.List;
+
+import static cz.thepatik.welcomeplugin.utils.VersionCheck.*;
 import static java.lang.Double.parseDouble;
 
 public class VersionCommand extends SubCommand {
@@ -30,6 +33,16 @@ public class VersionCommand extends SubCommand {
     @Override
     public String getSyntax() {
         return "/welcome version";
+    }
+
+    @Override
+    public boolean hasArguments() {
+        return false;
+    }
+
+    @Override
+    public List<String> tabComplete(String[] args) {
+        return Collections.emptyList();
     }
 
     @Override

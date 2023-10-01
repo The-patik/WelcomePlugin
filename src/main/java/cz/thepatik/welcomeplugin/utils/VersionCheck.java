@@ -1,4 +1,4 @@
-package cz.thepatik.welcomeplugin;
+package cz.thepatik.welcomeplugin.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class VersionCheck {
 
-    public static double pluginVersion = 0.5;
+    public static double pluginVersion = 0.6;
     public static String pluginVersionStage = "-beta";
 
     public static String getCurrentOnlineVersionString() throws IOException {

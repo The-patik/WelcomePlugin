@@ -5,7 +5,7 @@
 
 settings:
   #Show credits for newcomers or to everyone
-  #SET ONLY newcomers OR everyone
+  #SET ONLY newcomers OR everyone OR nobody
   show-credits: newcomers
 
   #Active titles

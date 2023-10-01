@@ -1,5 +1,6 @@
 package cz.thepatik.welcomeplugin.database;
 
+import com.comphenix.net.bytebuddy.implementation.bytecode.Throw;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -12,9 +13,9 @@ public class Database {
         connection = DriverManager.getConnection("jdbc:sqlite:" + path);
         try (Statement statement = connection.createStatement();) {
             statement.execute("CREATE TABLE IF NOT EXISTS PlayerData " +
-                    "(PlayerID int IDENTITY(1,1) PRIMARY KEY, PlayerUUID varchar(255)," +
+                    "(PlayerID INTEGER PRIMARY KEY AUTOINCREMENT, PlayerUUID varchar(255)," +
                     " PlayerName varchar(225), PlayTime int NOT NULL DEFAULT 0," +
-                    " PlayerJoins int NOT NULL DEFAULT 1);");
+                    " PlayerJoins int NOT NULL DEFAULT 0);");
         }
     }
 
@@ -32,6 +33,7 @@ public class Database {
             preparedStatement.executeUpdate();
         } catch (SQLException e){
             System.out.println("There was an error while adding player to database");
+            throw new RuntimeException(e);
         }
     }
     public boolean playerExists(Player p) throws SQLException{

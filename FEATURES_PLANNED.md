@@ -1,14 +1,9 @@
 # Features planned
 
-## soon - 0.6-beta
-* **~~Change credits to own text~~**
-* ~~Adding more commands for convenience config edits~~
-* ~~Maybe GUI menu :P~~
-* ~~Adding showcreditsto option to nobody~~
-* ~~Adding what-to-do after ESC press and leaving credits~~
-* ~~Adding tabcomplete for command showcreditsto~~
-* ~~Stop counting PlayTime when /reload is executed~~
+## soon
+* ~~Adding messages edit file~~
 * ~~Adding more counters - like messages sent and others~~
-* ~~Adding placeholders for PlayTime, PlayerJoins, etc~~
+* ~~Adding more commands for convenience config edits~~
 
 ## in a longer time
+* ~~Maybe GUI menu :P~~
