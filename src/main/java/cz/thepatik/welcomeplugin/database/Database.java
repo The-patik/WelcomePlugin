@@ -1,6 +1,5 @@
 package cz.thepatik.welcomeplugin.database;
 
-import com.comphenix.net.bytebuddy.implementation.bytecode.Throw;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
