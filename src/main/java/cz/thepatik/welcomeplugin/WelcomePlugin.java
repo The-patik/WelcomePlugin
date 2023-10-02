@@ -4,6 +4,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
 import cz.thepatik.welcomeplugin.database.Database;
+import cz.thepatik.welcomeplugin.utils.Placeholders;
 import cz.thepatik.welcomeplugin.utils.handlers.PlayerHandler;
 import cz.thepatik.welcomeplugin.utils.handlers.ReloadHandler;
 import org.bukkit.Bukkit;

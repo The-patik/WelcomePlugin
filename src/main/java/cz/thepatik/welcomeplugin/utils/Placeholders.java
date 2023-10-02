@@ -1,5 +1,6 @@
-package cz.thepatik.welcomeplugin;
+package cz.thepatik.welcomeplugin.utils;
 
+import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.utils.VersionCheck;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
