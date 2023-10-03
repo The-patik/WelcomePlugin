@@ -11,7 +11,7 @@ public class ReloadHandler implements Listener {
 
     @EventHandler
     public void onServerCommand(ServerCommandEvent event){
-        if (event.getCommand().equalsIgnoreCase("reload")){
+        if (event.getCommand().startsWith("reload")){
             for (Player player : Bukkit.getOnlinePlayers()){
                 player.kickPlayer("Server reload, please rejoin");
             }

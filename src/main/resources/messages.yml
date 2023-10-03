@@ -1,0 +1,29 @@
+# Here you can edit messages
+
+command-messages:
+  played-time: "&aYou are playing on the server for &6%WelcomePlugin_played_time%"
+  no-permissions: "&cYou do not have permissions!"
+  reloadconfig-command: "&aReloading config.yml and messages.yml"
+  player-joins: "&aYou have joined &6%WelcomePlugin_player_joins% &atimes!"
+  other-player-joins: "&aThe player $1 has joined &6%WelcomePlugin_player_$1_joins% &atimes!"
+  player-not-online: "&aThis player is not online!"
+
+# Editing the time format for played time
+#
+# For czech and other languages, where you have more plural possibilities:
+# pluralFew-days: "dny" (2,3,4)
+# pluralMany-days: "dní" (5,6,atd...)
+# a to samé u ostatních :) nemáte zač
+time-format:
+  singular-days: 'day'
+  singular-hours: 'hour'
+  singular-minutes: 'minute'
+  singular-seconds: 'second'
+  pluralFew-days: 'days'
+  pluralFew-hours: 'hours'
+  pluralFew-minutes: 'minutes'
+  pluralFew-seconds: 'seconds'
+  pluralMany-days: 'days'
+  pluralMany-hours: 'hours'
+  pluralMany-minutes: 'minutes'
+  pluralMany-seconds: 'seconds'

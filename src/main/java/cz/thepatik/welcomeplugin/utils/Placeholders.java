@@ -1,15 +1,10 @@
 package cz.thepatik.welcomeplugin.utils;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.utils.VersionCheck;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static cz.thepatik.welcomeplugin.utils.placeholder.PlayedTime.getPlayedTime;
 import static cz.thepatik.welcomeplugin.utils.placeholder.PlayerJoins.getElsePlayerJoins;
@@ -32,7 +27,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return VersionCheck.pluginVersion + VersionCheck.pluginVersionStage;
+        return plugin.getVersionCheck().getPluginVersion();
     }
     @Override
     public boolean persist(){
@@ -45,7 +40,7 @@ public class Placeholders extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
             if (identifier.equals("played_time")){
-                return getPlayedTime(player);
+                return getPlayedTime(player, plugin);
             } else if (identifier.equals("player_joins")) {
                 return String.valueOf(getPlayerJoins(player));
             } else if (identifier.startsWith("player_") && identifier.endsWith("_joins")){

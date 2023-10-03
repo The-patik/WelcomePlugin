@@ -1,4 +1,4 @@
-package cz.thepatik.welcomeplugin.utils.handlers;
+package cz.thepatik.welcomeplugin.utils.listeners;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -10,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
@@ -24,11 +25,11 @@ import java.util.UUID;
 import static cz.thepatik.welcomeplugin.WelcomePlugin.database;
 
 
-public class PlayerHandler implements Listener {
+public class PlayerListener implements Listener {
     private HashMap<UUID, BukkitTask> tasks = new HashMap<>();
     private final WelcomePlugin plugin;
 
-    public PlayerHandler(WelcomePlugin plugin) {
+    public PlayerListener(WelcomePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -100,4 +101,11 @@ public class PlayerHandler implements Listener {
             playerTimeTask.cancel();
         }
     }
+
+    @EventHandler
+    public void onPlayerMessage(AsyncPlayerChatEvent event){
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+    }
+
 }

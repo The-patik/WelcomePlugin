@@ -1,5 +1,6 @@
 package cz.thepatik.welcomeplugin.commands.subcommands;
 
+import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommand;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -7,12 +8,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static cz.thepatik.welcomeplugin.utils.PlayerChecker.isPlayerOnline;
 
 public class PlayerJoinsCommand extends SubCommand {
+
+    WelcomePlugin plugin;
+    public PlayerJoinsCommand(WelcomePlugin plugin){
+        this.plugin = plugin;
+    }
+
     @Override
     public String getName() {
         return "playerjoins";
@@ -52,16 +58,32 @@ public class PlayerJoinsCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (player.hasPermission(getPermissions()) && args.length == 1){
-            player.sendMessage(PlaceholderAPI.setPlaceholders(player, ChatColor.GREEN + "You have joined " + ChatColor.GOLD + "%WelcomePlugin_player_joins%" + ChatColor.GOLD + " times!"));
-        } else if (player.hasPermission(getPermissions()) && args.length == 2) {
-            if (isPlayerOnline(args[1])) {
-                player.sendMessage(PlaceholderAPI.setPlaceholders(player, ChatColor.GREEN + "The player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " is now online and have joined " + ChatColor.GOLD + "%WelcomePlugin_player_" + args[1] +  "_joins%" + ChatColor.GREEN + " times!"));
+            if (player.hasPermission(getPermissions()) && args.length == 1) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes
+                        ('&', PlaceholderAPI.setPlaceholders
+                                (player, plugin.getMessagesHandler().getMessages
+                                        ("command-messages", "player-joins"))));
+            } else if (player.hasPermission(getPermissions()) && args.length == 2) {
+                if (isPlayerOnline(args[1])) {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes
+                            ('&', PlaceholderAPI.setPlaceholders
+                                    (player, plugin.getMessagesHandler()
+                                            .getMessages("command-messages", "other-player-joins")
+                                            .replace("$1", args[1]))));
+                } else {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes
+                            ('&', PlaceholderAPI.setPlaceholders
+                                    (player, plugin.getMessagesHandler().getMessages
+                                            ("command-messages", "player-not-online"))));
+                }
             } else {
-                player.sendMessage(PlaceholderAPI.setPlaceholders(player, ChatColor.GREEN + "The player " + ChatColor.GOLD + args[1] + ChatColor.GREEN + " is not online and have joined " + ChatColor.GOLD + "%WelcomePlugin_player_" + args[1] + "_joins%" + ChatColor.GREEN + " times!"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes
+                        ('&', PlaceholderAPI.setPlaceholders
+                                (player, plugin.getMessagesHandler().getMessages
+                                        ("command-messages", "no-permissions"))));
             }
-        } else {
-            player.sendMessage(ChatColor.RED + "You do not have permissions!");
-        }
+        /*/ } else if (sender instanceof ConsoleCommandSender){
+            plugin.getLogger().info("This command can issue only players!");
+        }/*/
     }
 }

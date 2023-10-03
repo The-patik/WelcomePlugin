@@ -7,10 +7,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -24,12 +21,13 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 
     // Register all commands
     public CommandManager(){
-        subcommands.add(new UpdateCommand());
-        subcommands.add(new VersionCommand());
-        subcommands.add(new HelpCommand());
+        subcommands.add(new UpdateCommand(WelcomePlugin.getPlugin()));
+        subcommands.add(new VersionCommand(WelcomePlugin.getPlugin()));
+        subcommands.add(new HelpCommand(WelcomePlugin.getPlugin()));
         subcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new PlayedTimeCommand());
-        subcommands.add(new PlayerJoinsCommand());
+        subcommands.add(new PlayedTimeCommand(WelcomePlugin.getPlugin()));
+        subcommands.add(new PlayerJoinsCommand(WelcomePlugin.getPlugin()));
+        subcommands.add(new ReloadConfigCommand(WelcomePlugin.getPlugin()));
     }
 
     @Override
@@ -64,6 +62,8 @@ public class CommandManager implements CommandExecutor, TabExecutor {
                 welcomeHelpMessage.setFont("minecraft:uniform");
                sender.spigot().sendMessage(welcomeHelpMessageFirst, welcomeHelpMessage);
             }
+        } else if (sender instanceof ConsoleCommandSender) {
+            
         }
 
         return true;

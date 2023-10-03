@@ -1,5 +1,6 @@
 package cz.thepatik.welcomeplugin.database;
 
+import cz.thepatik.welcomeplugin.WelcomePlugin;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -59,6 +60,25 @@ public class Database {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+    public void checkMissingColumns(){
+        try {
+
+            String[] columnsToCheck = {"SentMessages"};
+
+            for (String columnName : columnsToCheck) {
+                ResultSet resultSet = connection.getMetaData().getColumns(null, null, "PlayerData", columnName);
+
+                if (!resultSet.next()){
+                    try(Statement statement = connection.createStatement()) {
+                        statement.execute("ALTER TABLE PlayerData ADD COLUMN " + columnName + " int NOT NULL DEFAULT 0");
+                    }
+                }
+
+            }
+        } catch (SQLException e){
+            WelcomePlugin.getPlugin().getLogger().severe("Error while checking/adding");
         }
     }
 }

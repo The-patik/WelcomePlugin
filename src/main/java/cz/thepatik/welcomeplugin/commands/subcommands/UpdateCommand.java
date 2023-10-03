@@ -1,6 +1,8 @@
 package cz.thepatik.welcomeplugin.commands.subcommands;
 
+import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommand;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -10,13 +12,13 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-
-import static cz.thepatik.welcomeplugin.utils.VersionCheck.getCurrentOnlineVersion;
-import static cz.thepatik.welcomeplugin.utils.VersionCheck.pluginVersion;
-import static java.lang.Double.parseDouble;
+import java.util.Objects;
 
 public class UpdateCommand extends SubCommand {
-
+    WelcomePlugin plugin;
+    public UpdateCommand(WelcomePlugin plugin){
+        this.plugin = plugin;
+    }
     @Override
     public String getName() {
         return "update";
@@ -53,13 +55,16 @@ public class UpdateCommand extends SubCommand {
             TextComponent pluginURL = new TextComponent("Spigot");
             pluginURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://spigotmc.org"));
             pluginURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Opens URL").create()));
-            if (pluginVersion == parseDouble(getCurrentOnlineVersion())) {
+            if (Objects.equals(plugin.getVersionCheck().getPluginVersion(), plugin.getVersionCheck().getCurrentOnlineVersion())) {
                 player.sendMessage("The plugin is up to date!");
             } else {
                 player.sendMessage("There is a new version on" + pluginURL);
             }
         } else {
-            player.sendMessage(ChatColor.RED + "You do not have permissions!");
+            player.sendMessage(ChatColor.translateAlternateColorCodes
+                    ('&', PlaceholderAPI.setPlaceholders
+                            (player, plugin.getMessagesHandler().getMessages
+                                    ("command-messages", "no-permissions"))));
         }
     }
 }

@@ -12,7 +12,12 @@ import static cz.thepatik.welcomeplugin.utils.TimeConverter.convertSecondsToTime
 
 public class PlayedTime {
 
-    public static String getPlayedTime(Player p){
+    WelcomePlugin plugin;
+    public PlayedTime(WelcomePlugin plugin){
+        this.plugin = plugin;
+    }
+
+    public static String getPlayedTime(Player p, WelcomePlugin plugin){
         int playTime = 0;
         String playedTime = null;
 
@@ -25,7 +30,7 @@ public class PlayedTime {
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
-        playedTime = convertSecondsToTime(playTime);
+        playedTime = convertSecondsToTime(playTime, plugin.getMessagesHandler());
         return playedTime;
     }
 }

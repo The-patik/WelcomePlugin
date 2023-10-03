@@ -1,6 +1,6 @@
 package cz.thepatik.welcomeplugin.tasks;
 
-import cz.thepatik.welcomeplugin.utils.handlers.PlayerHandler;
+import cz.thepatik.welcomeplugin.utils.listeners.PlayerListener;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -37,9 +37,9 @@ public class PlayTimeTask extends BukkitRunnable {
         }
     }
 
-    PlayerHandler playerHandler;
+    PlayerListener playerHandler;
 
-    public PlayTimeTask(PlayerHandler playerHandler, Player player){
+    public PlayTimeTask(PlayerListener playerHandler, Player player){
         this.playerHandler = playerHandler;
         p = player;
     }
@@ -49,13 +49,13 @@ public class PlayTimeTask extends BukkitRunnable {
         try {
             getTimeFromDB(p);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            plugin.getLogger().severe("There was a problem with taking PlayTime from database: " + e);
         }
         time++;
         try {
             setTimeInDB(p, time);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            plugin.getLogger().severe("There was a problem with putting PlayTime from database: " + e);
         }
     }
 }

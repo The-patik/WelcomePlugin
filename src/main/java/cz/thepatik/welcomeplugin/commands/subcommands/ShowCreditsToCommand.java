@@ -2,6 +2,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommand;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -71,7 +72,10 @@ public class ShowCreditsToCommand extends SubCommand {
 
             }
         }else {
-            player.sendMessage(ChatColor.RED + "You do not have permissions!");
+            player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes
+                    ('&', PlaceholderAPI.setPlaceholders
+                            (player, plugin.getMessagesHandler().getMessages
+                                    ("command-messages", "no-permissions"))));
         }
     }
 }
