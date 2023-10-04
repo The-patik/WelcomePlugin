@@ -1,5 +1,5 @@
 # Here you can edit messages
-#All messages supports changing of color with &
+# All messages supports changing of color with &
 
 ingame-messages:
   main-title-message: "&a&lWelcome!"
@@ -8,8 +8,8 @@ ingame-messages:
   welcome-player-chat-message: "&aHey, &6%player_name%&a, you joined &6%WelcomePlugin_player_joins% &atimes!"
 
 # Do not remove $1 from messages! You can corrupt the plugin!
-# Do not remove %WelcomePlugin_....% - it is our placeholder, for our all placeholders check:
-# This plugin supports PlaceholderAPI - list of placeholders:
+# Do not remove %WelcomePlugin_....% - it is our placeholder, for our all placeholders check: https://github.com/The-patik/WelcomePlugin/wiki/Placeholders
+# This plugin supports PlaceholderAPI - list of placeholders: https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Placeholders
 command-messages:
   played-time: "&aYou are playing on the server for &6%WelcomePlugin_played_time%"
   no-permissions: "&cYou do not have permissions!"
