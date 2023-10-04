@@ -1,12 +1,13 @@
 package cz.thepatik.welcomeplugin.commands;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.subcommands.*;
+import cz.thepatik.welcomeplugin.commands.subcommands.player.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -17,17 +18,28 @@ public class CommandManager implements CommandExecutor, TabExecutor {
     private CommandManager(WelcomePlugin welcomePlugin){
         this.welcomePlugin = welcomePlugin;
     }
-    private ArrayList<SubCommand> subcommands = new ArrayList<>();
+    private ArrayList<SubCommandPlayer> playersubcommands = new ArrayList<>();
+    private ArrayList<SubCommandConsole> consolesubcommands = new ArrayList<>();
 
     // Register all commands
     public CommandManager(){
-        subcommands.add(new UpdateCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new VersionCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new HelpCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new PlayedTimeCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new PlayerJoinsCommand(WelcomePlugin.getPlugin()));
-        subcommands.add(new ReloadConfigCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new UpdateCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new VersionCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new HelpCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new PlayedTimeCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new PlayerJoinsCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new ReloadConfigCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new SentMessagesCommand(WelcomePlugin.getPlugin()));
+
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.HelpCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayedTimeCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayerJoinsCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand(WelcomePlugin.getPlugin()));
     }
 
     @Override
@@ -41,9 +53,9 @@ public class CommandManager implements CommandExecutor, TabExecutor {
             if (args.length > 0){
                 // Run command
 
-                for (int i = 0; i < getSubcommands().size(); i++){
-                    if (args[0].equalsIgnoreCase(getSubcommands().get(i).getName())){
-                        getSubcommands().get(i).perform(p, args);
+                for (int i = 0; i < getPlayerSubcommands().size(); i++){
+                    if (args[0].equalsIgnoreCase(getPlayerSubcommands().get(i).getName())){
+                        getPlayerSubcommands().get(i).perform(p, args);
                     }
                 }
             } else if (args.length == 0){
@@ -51,27 +63,39 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 
                 TextComponent welcomeHelpMessage = new TextComponent("/welcome help");
                 welcomeHelpMessage.setColor(ChatColor.RED);
-                welcomeHelpMessage.setBold(false);
-                welcomeHelpMessage.setFont("minecraft:uniform");
+                welcomeHelpMessage.setItalic(true);
                 welcomeHelpMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/welcome help"));
                 welcomeHelpMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click & run command").create()));
 
                 TextComponent welcomeHelpMessageFirst = new TextComponent("You must specify a subcommand! For list of commands write ");
                 welcomeHelpMessage.setColor(ChatColor.RED);
                 welcomeHelpMessage.setBold(false);
-                welcomeHelpMessage.setFont("minecraft:uniform");
                sender.spigot().sendMessage(welcomeHelpMessageFirst, welcomeHelpMessage);
             }
         } else if (sender instanceof ConsoleCommandSender) {
-            
+            if (args.length > 0){
+                for (int i = 0; i < getConsolesubcommands().size(); i++){
+                    if (args[0].equalsIgnoreCase(getConsolesubcommands().get(i).getName())) {
+                        getConsolesubcommands().get(i).perform(sender, args);
+                    }
+                }
+            } else if (args.length == 0) {
+                Server server = sender.getServer();
+
+                server.getLogger().warning("You must specify a subcommand! For list of commands write /welcome help");
+            }
         }
 
         return true;
 
     }
 
-    public ArrayList<SubCommand> getSubcommands(){
-        return subcommands;
+    public ArrayList<SubCommandPlayer> getPlayerSubcommands(){
+        return playersubcommands;
+    }
+
+    public ArrayList<SubCommandConsole> getConsolesubcommands() {
+        return consolesubcommands;
     }
 
     // Tab complete logic
@@ -81,13 +105,13 @@ public class CommandManager implements CommandExecutor, TabExecutor {
 
         if (args.length == 1){
             // Find subcommand
-            for (int i = 0; i < getSubcommands().size(); i++){
-                completions.add(getSubcommands().get(i).getName());
+            for (int i = 0; i < getPlayerSubcommands().size(); i++){
+                completions.add(getPlayerSubcommands().get(i).getName());
             }
         } else if (args.length >= 2) {
             // Find corresponding subcommand
-            SubCommand subCommand = null;
-            for (SubCommand sc : subcommands) {
+            SubCommandPlayer subCommand = null;
+            for (SubCommandPlayer sc : playersubcommands) {
                 if (sc.getName().equalsIgnoreCase(args[0])) {
                     subCommand = sc;
                     break;

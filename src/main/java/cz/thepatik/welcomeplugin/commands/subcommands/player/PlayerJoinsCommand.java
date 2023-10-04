@@ -1,7 +1,7 @@
-package cz.thepatik.welcomeplugin.commands.subcommands;
+package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.SubCommand;
+import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static cz.thepatik.welcomeplugin.utils.PlayerChecker.isPlayerOnline;
 
-public class PlayerJoinsCommand extends SubCommand {
+public class PlayerJoinsCommand extends SubCommandPlayer {
 
     WelcomePlugin plugin;
     public PlayerJoinsCommand(WelcomePlugin plugin){

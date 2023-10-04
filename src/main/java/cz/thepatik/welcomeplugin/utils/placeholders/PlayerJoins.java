@@ -1,4 +1,4 @@
-package cz.thepatik.welcomeplugin.utils.placeholder;
+package cz.thepatik.welcomeplugin.utils.placeholders;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.database.Database;

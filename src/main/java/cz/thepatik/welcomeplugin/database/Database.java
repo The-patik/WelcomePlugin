@@ -62,6 +62,27 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+
+    public void addMessagesSent(Player p){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT SentMessages" +
+                    " FROM PlayerData WHERE PlayerUUID = ?");
+            preparedStatement.setString(1, p.getUniqueId().toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int playerMessagesSent = resultSet.getInt("SentMessages");
+            playerMessagesSent++;
+            try(PreparedStatement preparedStatement1 = connection.prepareStatement("UPDATE PlayerData" +
+                    " SET SentMessages = ? WHERE PlayerUUID = ?")) {
+                preparedStatement1.setInt(1, playerMessagesSent);
+                preparedStatement1.setString(2, p.getUniqueId().toString());
+                preparedStatement1.executeUpdate();
+            }
+        } catch (SQLException e){
+            System.out.println("There was a problem with adding message to database!");
+            throw new RuntimeException(e);
+        }
+    }
+
     public void checkMissingColumns(){
         try {
 

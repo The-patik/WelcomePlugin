@@ -4,8 +4,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
 import cz.thepatik.welcomeplugin.database.Database;
-import cz.thepatik.welcomeplugin.utils.Placeholders;
-import cz.thepatik.welcomeplugin.utils.VersionCheck;
+import cz.thepatik.welcomeplugin.utils.handlers.PlaceholdersHandler;
+import cz.thepatik.welcomeplugin.utils.Updater;
 import cz.thepatik.welcomeplugin.utils.handlers.MessagesHandler;
 import cz.thepatik.welcomeplugin.utils.handlers.ReloadHandler;
 import cz.thepatik.welcomeplugin.utils.listeners.PlayerListener;
@@ -14,19 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.logging.Logger;
 
 public final class WelcomePlugin extends JavaPlugin {
-
     private static WelcomePlugin plugin;
-
-    public static Logger logger;
-    private ProtocolManager protocolManager;
-
     public static Database database;
     private MessagesHandler messagesHandler;
-    private VersionCheck versionCheck;
 
     @Override
     public void onEnable() {
@@ -39,8 +31,8 @@ public final class WelcomePlugin extends JavaPlugin {
         // Initialize MessageHandler
         messagesHandler = new MessagesHandler(this);
 
-        // Initialize VersionCheck
-        versionCheck = new VersionCheck(this);
+        // Initialize Updater
+        Updater updater = new Updater(this, 112870);
 
         //Check ProtocolLibs
         if (getServer().getPluginManager().getPlugin("ProtocolLib") == null) {
@@ -54,22 +46,22 @@ public final class WelcomePlugin extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             //Check version
-            if (!Objects.equals(getVersionCheck().getPluginVersion(), getVersionCheck().getCurrentOnlineVersion())) {
+            if (updater.checkForUpdates()) {
                 getLogger().info("The plugin is up to date!");
             } else {
-                getLogger().warning("There is a new version! Check GitHub!");
-                getLogger().info("Plugin version: " + getVersionCheck().getPluginVersion());
-                getLogger().info("Updated version: " + getVersionCheck().getCurrentOnlineVersion());
+                getLogger().warning("There is a new version! Check Spigot! https://www.spigotmc.org/resources/" + updater.getProjectID());
+                getLogger().info("Plugin version: " + updater.getPluginVersion());
+                getLogger().info("Updated version: " + updater.getNewVersion());
             }
 
             //Register commands
             getCommand("welcome").setExecutor(new CommandManager());
 
             //Register ProtocolLib
-            protocolManager = ProtocolLibrary.getProtocolManager();
+            ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
             // Register Placeholders
-            new Placeholders(this).register();
+            new PlaceholdersHandler(this).register();
 
             //Register Handlers
             Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -78,9 +70,9 @@ public final class WelcomePlugin extends JavaPlugin {
             String currentPluginVersion = getConfig().getString("plugin-version");
 
             //Set version in config
-            if (!getVersionCheck().getPluginVersion().equals(this.getConfig().getString("plugin-version"))) {
-                getLogger().info("Plugin has been updated from " + currentPluginVersion + " to new version: " + getVersionCheck().getPluginVersion());
-                this.getConfig().set("plugin-version", getVersionCheck().getPluginVersion());
+            if (!getUpdater().getPluginVersion().equals(this.getConfig().getString("plugin-version"))) {
+                getLogger().info("Plugin has been updated from " + currentPluginVersion + " to new version: " + getUpdater().getPluginVersion());
+                this.getConfig().set("plugin-version", getUpdater().getPluginVersion());
                 this.saveConfig();
             }
 
@@ -98,7 +90,7 @@ public final class WelcomePlugin extends JavaPlugin {
                 Bukkit.getPluginManager().disablePlugin(this);
             }
 
-            // Check missingColums after update
+            // Check missingColumns after update
             database.checkMissingColumns();
 
             //Finally the plugin is loaded...
@@ -113,9 +105,10 @@ public final class WelcomePlugin extends JavaPlugin {
 
         try {
             database.closeConnection();
-        } catch (SQLException e){
-            System.out.println("Error when closing database connection");
+        }catch (Exception e){
+            getLogger().severe("Database connection was closed...");
         }
+        getLogger().info("Database connection was closed...");
     }
 
     public static WelcomePlugin getPlugin(){
@@ -126,8 +119,8 @@ public final class WelcomePlugin extends JavaPlugin {
         return messagesHandler;
     }
 
-    public VersionCheck getVersionCheck(){
-        return versionCheck;
+    public Updater getUpdater(){
+        return new Updater(this, 112870);
     }
 
 }

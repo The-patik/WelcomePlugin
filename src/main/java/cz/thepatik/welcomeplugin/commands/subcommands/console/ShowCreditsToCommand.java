@@ -1,16 +1,19 @@
-package cz.thepatik.welcomeplugin.commands.subcommands;
+package cz.thepatik.welcomeplugin.commands.subcommands.console;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.SubCommand;
+import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
+import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowCreditsToCommand extends SubCommand {
+public class ShowCreditsToCommand extends SubCommandConsole {
 
     private final WelcomePlugin plugin;
 
@@ -56,26 +59,21 @@ public class ShowCreditsToCommand extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(CommandSender sender, String[] args) {
         ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
 
-        if (player.hasPermission(getPermissions())){
-            if (args.length == 1){
-                String toWho = cs.getString("show-credits");
-                player.sendMessage(ChatColor.GREEN + "Now showing credits to: " + ChatColor.DARK_GREEN + toWho);
-                player.sendMessage(ChatColor.RED + "To edit you must specify to who -" + ChatColor.DARK_GREEN + " newcomers" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " everyone" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " nobody");
-            } else if (args.length == 2){
-                String toWho = args[1];
+        Server server = sender.getServer();
 
-                cs.set("show-credits", toWho);
-                player.sendMessage(ChatColor.GREEN + "Now showing credits only to " + ChatColor.GOLD + toWho);
+        if (args.length == 1){
+            String toWho = cs.getString("show-credits");
+            server.getLogger().info("Now showing credits to: " + toWho);
+            server.getLogger().info("To edit you must specify to who show credits! See docs!");
+        } else if (args.length == 2){
+            String toWho = args[1];
 
-            }
-        }else {
-            player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes
-                    ('&', PlaceholderAPI.setPlaceholders
-                            (player, plugin.getMessagesHandler().getMessages
-                                    ("command-messages", "no-permissions"))));
+            cs.set("show-credits", toWho);
+            server.getLogger().info("Now showing credits only to " + toWho);
+
         }
     }
 }

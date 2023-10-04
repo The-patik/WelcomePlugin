@@ -31,21 +31,11 @@ public class MessagesHandler {
         return "Message not found!";
     }
 
-    public void reloadConfig(JavaPlugin plugin){
-        File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
-
-        try {
-            messagesConfig.load(messagesFile);
-        }catch (IOException | InvalidConfigurationException e){
-            plugin.getLogger().severe("Can not reload messages.yml: " + e);
-        }
-    }
-
     public void saveMessagesConfig(JavaPlugin plugin){
         File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
         try {
             messagesConfig.save(messagesFile);
-        }catch (IOException e){
+        }catch (Exception e){
             plugin.getLogger().severe("Can not save messages.yml: " + e);
         }
     }

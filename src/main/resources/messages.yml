@@ -1,19 +1,30 @@
 # Here you can edit messages
+#All messages supports changing of color with &
 
+ingame-messages:
+  main-title-message: "&a&lWelcome!"
+  subtitle-message: "&aHey, &6%player_name% &awe are glad you came back!"
+  first-time-player-chat-message: "&aHey, &6%player_name%&a, it's yours first time!"
+  welcome-player-chat-message: "&aHey, &6%player_name%&a, you joined &6%WelcomePlugin_player_joins% &atimes!"
+
+# Do not remove $1 from messages! You can corrupt the plugin!
+# Do not remove %WelcomePlugin_....% - it is our placeholder, for our all placeholders check:
+# This plugin supports PlaceholderAPI - list of placeholders:
 command-messages:
   played-time: "&aYou are playing on the server for &6%WelcomePlugin_played_time%"
   no-permissions: "&cYou do not have permissions!"
-  reloadconfig-command: "&aReloading config.yml and messages.yml"
+  reloadconfig-command: "&aReloading config.yml"
   player-joins: "&aYou have joined &6%WelcomePlugin_player_joins% &atimes!"
-  other-player-joins: "&aThe player $1 has joined &6%WelcomePlugin_player_$1_joins% &atimes!"
+  other-player-joins: "&aThe player $1 has joined &6%WelcomePlugin_player_$1_joins% &atimes!" # $1 is playername - DO NOT REMOVE!
   player-not-online: "&aThis player is not online!"
+  sent-messages: "&aYou sent &6%WelcomePlugin_sent_messages% &amessages!"
 
 # Editing the time format for played time
 #
 # For czech and other languages, where you have more plural possibilities:
 # pluralFew-days: "dny" (2,3,4)
 # pluralMany-days: "dní" (5,6,atd...)
-# a to samé u ostatních :) nemáte zač
+# a to samé u ostatních jednotek :) nemáte zač
 time-format:
   singular-days: 'day'
   singular-hours: 'hour'

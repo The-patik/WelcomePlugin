@@ -1,7 +1,7 @@
-package cz.thepatik.welcomeplugin.commands.subcommands;
+package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.SubCommand;
+import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-public class HelpCommand extends SubCommand {
+public class HelpCommand extends SubCommandPlayer {
     WelcomePlugin plugin;
     public HelpCommand(WelcomePlugin plugin){
         this.plugin = plugin;
@@ -49,11 +49,15 @@ public class HelpCommand extends SubCommand {
 
             if (player.hasPermission(getPermissions())) {
                 player.sendMessage("");
-                player.sendMessage("Welcome Plugin command list");
+                player.sendMessage("Welcome Plugin Help Page");
                 player.sendMessage("");
                 player.sendMessage("--------------------------------------------------");
                 player.sendMessage("");
                 player.sendMessage("/welcome help - Shows all commands");
+                player.sendMessage("/welcome playedtime - Shows time you spent playing on server");
+                player.sendMessage("/welcome playerjoins - Shows how many times you joined the server");
+                player.sendMessage("/welcome playerjoins <playerName> - Shows how many times specified player joined the server");
+                player.sendMessage("/welcome showcreditsto <who> - Set config show-credits in game! For more info run without who");
                 player.sendMessage("/welcome update - Checks for updates");
                 player.sendMessage("/welcome version - Shows version of plugin");
                 player.sendMessage("");

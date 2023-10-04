@@ -1,7 +1,7 @@
-package cz.thepatik.welcomeplugin.commands.subcommands;
+package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.SubCommand;
+import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,30 +9,29 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-public class ReloadConfigCommand extends SubCommand {
-
+public class SentMessagesCommand extends SubCommandPlayer {
     WelcomePlugin plugin;
-    public ReloadConfigCommand(WelcomePlugin plugin){
+    public SentMessagesCommand(WelcomePlugin plugin){
         this.plugin = plugin;
     }
     @Override
     public String getName() {
-        return "reloadconfig";
+        return "sentmessages";
     }
 
     @Override
     public String getPermissions() {
-        return "welcomeplugin.reload";
+        return "welcomeplugin.sentmessages";
     }
 
     @Override
     public String getDescription() {
-        return "Reloads configuration and messages";
+        return "Shows how many messages you sent";
     }
 
     @Override
     public String getSyntax() {
-        return "/welcome reloadconfig";
+        return "/welcome sentmessages";
     }
 
     @Override
@@ -47,14 +46,16 @@ public class ReloadConfigCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-
         if (player.hasPermission(getPermissions())){
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, plugin.getMessagesHandler().getMessages
-                                    ("command-messages", "reloadconfig-command"))));
+                                    ("command-messages", "sent-messages"))));
+        } else {
+            player.sendMessage(ChatColor.translateAlternateColorCodes
+                    ('&', PlaceholderAPI.setPlaceholders
+                            (player, plugin.getMessagesHandler().getMessages
+                                    ("command-messages", "no-permissions"))));
         }
-        plugin.getMessagesHandler().saveMessagesConfig(plugin);
-        plugin.getMessagesHandler().reloadConfig(plugin);
     }
 }

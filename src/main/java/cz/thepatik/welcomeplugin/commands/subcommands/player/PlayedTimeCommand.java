@@ -1,7 +1,7 @@
-package cz.thepatik.welcomeplugin.commands.subcommands;
+package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.SubCommand;
+import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-public class PlayedTimeCommand extends SubCommand {
+public class PlayedTimeCommand extends SubCommandPlayer {
 
     WelcomePlugin plugin;
     public PlayedTimeCommand(WelcomePlugin plugin){

@@ -1,7 +1,7 @@
-package cz.thepatik.welcomeplugin.commands.subcommands;
+package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.SubCommand;
+import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -12,9 +12,8 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-public class UpdateCommand extends SubCommand {
+public class UpdateCommand extends SubCommandPlayer {
     WelcomePlugin plugin;
     public UpdateCommand(WelcomePlugin plugin){
         this.plugin = plugin;
@@ -52,19 +51,36 @@ public class UpdateCommand extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         if (player.hasPermission(getPermissions())) {
-            TextComponent pluginURL = new TextComponent("Spigot");
-            pluginURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://spigotmc.org"));
-            pluginURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Opens URL").create()));
-            if (Objects.equals(plugin.getVersionCheck().getPluginVersion(), plugin.getVersionCheck().getCurrentOnlineVersion())) {
+
+            if (plugin.getUpdater().checkForUpdates()) {
+
                 player.sendMessage("The plugin is up to date!");
+
             } else {
-                player.sendMessage("There is a new version on" + pluginURL);
+
+                TextComponent spigotOpenURL = new TextComponent("Spigot");
+                spigotOpenURL.setColor(net.md_5.bungee.api.ChatColor.RED);
+                spigotOpenURL.setItalic(true);
+                spigotOpenURL.setBold(true);
+                spigotOpenURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/welcomeplugin.112870/"));
+                spigotOpenURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Opens URL").create()));
+
+                TextComponent welcomeUpdateMessage = new TextComponent(ChatColor.GREEN + "There is a new version on ");
+                spigotOpenURL.setColor(net.md_5.bungee.api.ChatColor.RED);
+                spigotOpenURL.setBold(false);
+
+                player.spigot().sendMessage(welcomeUpdateMessage, spigotOpenURL);
+                player.sendMessage(ChatColor.GREEN + "Your version is " + ChatColor.GOLD + plugin.getUpdater().getPluginVersion());
+                player.sendMessage(ChatColor.GREEN + "The new version is " + ChatColor.GOLD + plugin.getUpdater().getNewVersion());
+
             }
         } else {
+
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, plugin.getMessagesHandler().getMessages
                                     ("command-messages", "no-permissions"))));
+
         }
     }
 }

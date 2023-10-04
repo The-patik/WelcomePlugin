@@ -1,4 +1,4 @@
-package cz.thepatik.welcomeplugin.utils;
+package cz.thepatik.welcomeplugin.utils.handlers;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -6,13 +6,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static cz.thepatik.welcomeplugin.utils.placeholder.PlayedTime.getPlayedTime;
-import static cz.thepatik.welcomeplugin.utils.placeholder.PlayerJoins.getElsePlayerJoins;
-import static cz.thepatik.welcomeplugin.utils.placeholder.PlayerJoins.getPlayerJoins;
+import static cz.thepatik.welcomeplugin.utils.placeholders.PlayedTime.getPlayedTime;
+import static cz.thepatik.welcomeplugin.utils.placeholders.PlayerJoins.getElsePlayerJoins;
+import static cz.thepatik.welcomeplugin.utils.placeholders.PlayerJoins.getPlayerJoins;
+import static cz.thepatik.welcomeplugin.utils.placeholders.SentMessages.getMessagesSent;
 
-public class Placeholders extends PlaceholderExpansion {
+public class PlaceholdersHandler extends PlaceholderExpansion {
     private final WelcomePlugin plugin;
-    public Placeholders(WelcomePlugin plugin){
+    public PlaceholdersHandler(WelcomePlugin plugin){
         this.plugin = plugin;
     }
     @Override
@@ -27,7 +28,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return plugin.getVersionCheck().getPluginVersion();
+        return plugin.getUpdater().getPluginVersion();
     }
     @Override
     public boolean persist(){
@@ -46,6 +47,8 @@ public class Placeholders extends PlaceholderExpansion {
             } else if (identifier.startsWith("player_") && identifier.endsWith("_joins")){
                 String playerName = identifier.substring("player_".length(), identifier.length() - "_joins".length());
                 return String.valueOf(getElsePlayerJoins(playerName));
+            } else if (identifier.equals("sent_messages")){
+                return String.valueOf(getMessagesSent(player));
             } else {
                 player.sendMessage(ChatColor.RED + "not valid placeholder");
             }

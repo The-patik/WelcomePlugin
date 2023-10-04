@@ -8,12 +8,11 @@ settings:
   #SET ONLY newcomers OR everyone OR nobody
   show-credits: newcomers
 
-  #Active titles
+  #Enable titles
   enable-titles: true
 
-  #Main title message
-  main-title-message: Welcome!
+  enable-first-time-chat-message: true
 
-  #Subtitle message
-  subtitle-message: Hey, %player_name% we are glad you came back!
+  enable-welcome-chat-message: true
+
 plugin-version:

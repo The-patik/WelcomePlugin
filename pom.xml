@@ -6,7 +6,7 @@
 
     <groupId>cz.thepatik</groupId>
     <artifactId>WelcomePlugin</artifactId>
-    <version>0.6-beta</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>WelcomePlugin</name>
