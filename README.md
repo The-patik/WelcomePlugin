@@ -1,4 +1,4 @@
-# WelcomePlugin
+# WelcomePlugin v1.0
 ### Updated to 1.20.2
 
 This plugin gives you the option to display a Minecraft credits page to new players, which you can customize to your liking and display information about the server, for example.
