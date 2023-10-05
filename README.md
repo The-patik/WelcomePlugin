@@ -17,6 +17,7 @@ This plugin gives you the option to display a Minecraft credits page to new play
 * Adding custom join message for every player
 * Adding MySQL support
 * Adding custom join effects
+* Adding reload command for messages.yml
 
 # Commands
 * **/welcome help** - shows help page
