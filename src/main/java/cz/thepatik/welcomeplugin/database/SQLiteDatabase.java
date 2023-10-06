@@ -86,14 +86,14 @@ public class SQLiteDatabase {
     public void checkMissingColumns(){
         try {
 
-            String[] columnsToCheck = {"SentMessages"};
+            String[] columnsIntToCheck = {"SentMessages"};
 
-            for (String columnName : columnsToCheck) {
-                ResultSet resultSet = connection.getMetaData().getColumns(null, null, "PlayerData", columnName);
+            for (String columnIntName : columnsIntToCheck) {
+                ResultSet resultSet = connection.getMetaData().getColumns(null, null, "PlayerData", columnIntName);
 
                 if (!resultSet.next()){
                     try(Statement statement = connection.createStatement()) {
-                        statement.execute("ALTER TABLE PlayerData ADD COLUMN " + columnName + " int NOT NULL DEFAULT 0");
+                        statement.execute("ALTER TABLE PlayerData ADD COLUMN " + columnIntName + " int NOT NULL DEFAULT 0");
                     }
                 }
 
