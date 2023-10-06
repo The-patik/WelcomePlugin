@@ -1,7 +1,7 @@
 package cz.thepatik.welcomeplugin.utils.placeholders;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.database.Database;
+import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ public class PlayedTime {
         int playTime = 0;
         String playedTime = null;
 
-        Database database = WelcomePlugin.database;
+        SQLiteDatabase database = WelcomePlugin.database;
         try {
             PreparedStatement preparedStatement = database.connection.prepareStatement("SELECT PlayTime FROM PlayerData WHERE PlayerUUID = ?");
             preparedStatement.setString(1, p.getUniqueId().toString());

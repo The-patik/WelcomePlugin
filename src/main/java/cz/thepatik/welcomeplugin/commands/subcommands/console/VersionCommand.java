@@ -55,9 +55,9 @@ public class VersionCommand extends SubCommandConsole {
     public void perform(CommandSender sender, String[] args) {
         Server server = sender.getServer();
         if (plugin.getUpdater().checkForUpdates()) {
-            server.getLogger().info("The plugin version is " + plugin.getUpdater().getPluginVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + plugin.getUpdater().getPluginVersion());
         } else {
-            server.getLogger().info("The plugin version is " + plugin.getUpdater().getPluginVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + plugin.getUpdater().getPluginVersion());
             server.getLogger().info("But this version is old... For more info run /welcome update");
         }
     }

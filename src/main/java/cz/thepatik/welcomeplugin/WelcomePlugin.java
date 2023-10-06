@@ -3,7 +3,7 @@ package cz.thepatik.welcomeplugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
-import cz.thepatik.welcomeplugin.database.Database;
+import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.utils.handlers.PlaceholdersHandler;
 import cz.thepatik.welcomeplugin.utils.Updater;
 import cz.thepatik.welcomeplugin.utils.handlers.MessagesHandler;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 public final class WelcomePlugin extends JavaPlugin {
     private static WelcomePlugin plugin;
-    public static Database database;
+    public static SQLiteDatabase database;
     private MessagesHandler messagesHandler;
 
     @Override
@@ -84,7 +84,7 @@ public final class WelcomePlugin extends JavaPlugin {
 
             //Load database
             try {
-                database = new Database(getDataFolder().getAbsolutePath() + "/data/database.db");
+                database = new SQLiteDatabase(getDataFolder().getAbsolutePath() + "/data/database.db");
             } catch (SQLException e) {
                 getLogger().severe("Connection to database failed!" + e);
                 Bukkit.getPluginManager().disablePlugin(this);

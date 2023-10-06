@@ -70,8 +70,8 @@ public class UpdateCommand extends SubCommandPlayer {
                 spigotOpenURL.setBold(false);
 
                 player.spigot().sendMessage(welcomeUpdateMessage, spigotOpenURL);
-                player.sendMessage(ChatColor.GREEN + "Your version is " + ChatColor.GOLD + plugin.getUpdater().getPluginVersion());
-                player.sendMessage(ChatColor.GREEN + "The new version is " + ChatColor.GOLD + plugin.getUpdater().getNewVersion());
+                player.sendMessage(ChatColor.GREEN + "You are running WelcomePlugin v" + ChatColor.GOLD + plugin.getUpdater().getPluginVersion());
+                player.sendMessage(ChatColor.GREEN + "The new version is WelcomePlugin v" + ChatColor.GOLD + plugin.getUpdater().getNewVersion());
 
             }
         } else {

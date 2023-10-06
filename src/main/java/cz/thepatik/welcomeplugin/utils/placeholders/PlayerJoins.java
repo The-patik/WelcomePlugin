@@ -1,7 +1,7 @@
 package cz.thepatik.welcomeplugin.utils.placeholders;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.database.Database;
+import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ public class PlayerJoins {
     public static int getPlayerJoins(Player p){
         int playerJoins = 0;
 
-        Database database = WelcomePlugin.database;
+        SQLiteDatabase database = WelcomePlugin.database;
         try {
             PreparedStatement preparedStatement = database.connection.prepareStatement("SELECT PlayerJoins FROM PlayerData WHERE PlayerUUID = ?");
             preparedStatement.setString(1, p.getUniqueId().toString());
@@ -28,7 +28,7 @@ public class PlayerJoins {
     public static int getElsePlayerJoins(String p){
         int playerJoins = 0;
 
-        Database database = WelcomePlugin.database;
+        SQLiteDatabase database = WelcomePlugin.database;
         try {
             PreparedStatement preparedStatement = database.connection.prepareStatement("SELECT PlayerJoins FROM PlayerData WHERE PlayerName = ?");
             preparedStatement.setString(1, p);

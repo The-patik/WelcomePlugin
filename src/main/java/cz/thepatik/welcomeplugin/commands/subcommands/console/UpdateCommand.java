@@ -61,8 +61,8 @@ public class UpdateCommand extends SubCommandConsole {
             } else {
 
             server.getLogger().warning("There is an update on: https://www.spigotmc.org/resources/welcomeplugin.112870/");
-            server.getLogger().info("Your version is " + plugin.getUpdater().getPluginVersion());
-            server.getLogger().info("The new version is " + plugin.getUpdater().getNewVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + plugin.getUpdater().getPluginVersion());
+            server.getLogger().info("The new version is WelcomePlugin v" + plugin.getUpdater().getNewVersion());
 
         }
     }

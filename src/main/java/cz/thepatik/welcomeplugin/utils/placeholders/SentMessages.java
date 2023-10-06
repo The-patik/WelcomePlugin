@@ -1,7 +1,7 @@
 package cz.thepatik.welcomeplugin.utils.placeholders;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.database.Database;
+import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -12,7 +12,7 @@ public class SentMessages {
     public static int getMessagesSent(Player p){
         int playerMessagesSent = 0;
 
-        Database database = WelcomePlugin.database;
+        SQLiteDatabase database = WelcomePlugin.database;
 
         try {
             PreparedStatement preparedStatement = database.connection.prepareStatement("SELECT SentMessages" +
