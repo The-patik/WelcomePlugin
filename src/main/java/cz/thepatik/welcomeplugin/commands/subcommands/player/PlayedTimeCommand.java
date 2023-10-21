@@ -2,6 +2,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,10 +12,7 @@ import java.util.List;
 
 public class PlayedTimeCommand extends SubCommandPlayer {
 
-    WelcomePlugin plugin;
-    public PlayedTimeCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
 
     @Override
     public String getName() {
@@ -47,19 +45,16 @@ public class PlayedTimeCommand extends SubCommandPlayer {
     @Override
     public void perform(Player player, String[] args) {
 
-            if (player.hasPermission(getPermissions())) {
+        if (player.hasPermission(getPermissions())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
-                                (player, plugin.getMessagesHandler().getMessages
+                                (player, functions.getMessagesHandler().getMessages
                                         ("command-messages", "played-time"))));
-            } else {
+        } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
-                                (player, plugin.getMessagesHandler().getMessages
+                                (player, functions.getMessagesHandler().getMessages
                                         ("command-messages", "no-permissions"))));
-            }
-        /*/ } else if (sender instanceof ConsoleCommandSender){
-            plugin.getLogger().info("This command can issue only players!");
-        }/*/
+        }
     }
 }

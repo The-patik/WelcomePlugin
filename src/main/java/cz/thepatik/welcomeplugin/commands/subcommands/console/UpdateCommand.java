@@ -3,6 +3,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.console;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -17,10 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class UpdateCommand extends SubCommandConsole {
-    WelcomePlugin plugin;
-    public UpdateCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
+
     @Override
     public String getName() {
         return "update";
@@ -54,15 +53,15 @@ public class UpdateCommand extends SubCommandConsole {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Server server = sender.getServer();
-        if (plugin.getUpdater().checkForUpdates()) {
+        if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
 
             server.getLogger().info("The plugin is up to date!");
 
             } else {
 
             server.getLogger().warning("There is an update on: https://www.spigotmc.org/resources/welcomeplugin.112870/");
-            server.getLogger().info("You are running WelcomePlugin v" + plugin.getUpdater().getPluginVersion());
-            server.getLogger().info("The new version is WelcomePlugin v" + plugin.getUpdater().getNewVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + functions.welcomePlugin().getUpdater().getPluginVersion());
+            server.getLogger().info("The new version is WelcomePlugin v" + functions.welcomePlugin().getUpdater().getNewVersion());
 
         }
     }

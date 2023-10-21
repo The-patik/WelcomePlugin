@@ -4,9 +4,15 @@
 # This plugin supports PlaceholderAPI!
 
 settings:
+  # Enable showing start credits
+  enable-credits: true
+
   # Show credits for newcomers or to everyone
-  # SET ONLY newcomers OR everyone OR nobody
+  # SET ONLY newcomers OR everyone
   show-credits: newcomers
+
+  # Check if resource pack was initialized, if not, kick player
+  kick-when-no-resource-pack: true
 
   # Enable titles
   enable-titles: true
@@ -17,16 +23,31 @@ settings:
   # Enable welcome message
   enable-welcome-chat-message: true
 
-  use-database: sqlite
+  # Enable join messages
+  enable-join-messages: true
 
+  # Enable join messages
+  enable-leave-messages: true
+
+  # Enable custom player join messages - need to set true enable-join-messages!!!!
+  enable-custom-join-messages: true
+
+  # Enable custom player join messages - need to set true enable-join-messages!!!!
+  enable-custom-leave-messages: true
+
+  # Enable counters
+  enable-counters: true
+
+  # Set what database type you want to use - mysql or sqlite
+  use-database-type: sqlite
+
+# If use-database is mysql, setup this!
 mysql-settings:
 
   db-host-and-port: localhost:3306
 
-  db-name: database_Name
+  db-name: databaseName
 
   db-username: userName
 
   db-password: dbPasswd
-
-plugin-version:

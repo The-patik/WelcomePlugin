@@ -3,11 +3,13 @@
 ## soon
 * Adding more placeholders for played time - showing only days, or hours, or minutes
 * Change server MOTD
-* Adding custom join message for every player
 * Adding MySQL support
 * Adding custom join effects
-* Adding reload command for messages.yml
-* Adding option to enable or disable count functions
+* Added reload command for messages.yml
+* Added option to enable or disable count functions
+* Added option to choose if kick player when resource pack not installed
+* Added custom join message for every player
+* Added config and messages backup when plugin version change
 
 ## in a longer time
 * ~~Maybe GUI menu :P~~

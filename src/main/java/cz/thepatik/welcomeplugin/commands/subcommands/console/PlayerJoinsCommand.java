@@ -3,6 +3,8 @@ package cz.thepatik.welcomeplugin.commands.subcommands.console;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
+import cz.thepatik.welcomeplugin.utils.placeholders.PlayerJoins;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,15 +15,9 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cz.thepatik.welcomeplugin.utils.PlayerChecker.isPlayerOnline;
-import static cz.thepatik.welcomeplugin.utils.placeholders.PlayerJoins.getElsePlayerJoins;
-
 public class PlayerJoinsCommand extends SubCommandConsole {
 
-    WelcomePlugin plugin;
-    public PlayerJoinsCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
 
     @Override
     public String getName() {
@@ -62,11 +58,13 @@ public class PlayerJoinsCommand extends SubCommandConsole {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
+        PlayerJoins playerJoins = new PlayerJoins(functions.welcomePlugin());
+
         Server server = sender.getServer();
             if (args.length == 1) {
                 server.getLogger().info("This command can issue only players!");
             } else if (args.length == 2) {
-                server.getLogger().info("The player " + args[1] + " has joined " + getElsePlayerJoins(args[1]) + " times!");
+                server.getLogger().info("The player " + args[1] + " has joined " + playerJoins.getElsePlayerJoins(args[1]) + " times!");
             }
     }
 }

@@ -2,6 +2,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,10 +12,7 @@ import java.util.List;
 
 public class ReloadConfigCommand extends SubCommandPlayer {
 
-    WelcomePlugin plugin;
-    public ReloadConfigCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
     @Override
     public String getName() {
         return "reloadconfig";
@@ -51,13 +49,14 @@ public class ReloadConfigCommand extends SubCommandPlayer {
         if (player.hasPermission(getPermissions())){
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
-                            (player, plugin.getMessagesHandler().getMessages
+                            (player, functions.getMessagesHandler().getMessages
                                     ("command-messages", "reloadconfig-command"))));
-            plugin.saveConfig();
+            functions.welcomePlugin().saveConfig();
+            functions.welcomePlugin().reloadConfig();
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
-                            (player, plugin.getMessagesHandler().getMessages
+                            (player, functions.getMessagesHandler().getMessages
                                     ("command-messages", "no-permissions"))));
         }
     }

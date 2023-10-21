@@ -1,5 +1,6 @@
 package cz.thepatik.welcomeplugin.tasks;
 
+import cz.thepatik.welcomeplugin.utils.Functions;
 import cz.thepatik.welcomeplugin.utils.listeners.PlayerListener;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import org.bukkit.entity.Player;
@@ -9,19 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static cz.thepatik.welcomeplugin.WelcomePlugin.database;
-
 public class PlayTimeTask extends BukkitRunnable {
     private Player p;
-    private WelcomePlugin plugin;
-    private PlayTimeTask(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
+    WelcomePlugin plugin = functions.welcomePlugin();
 
     private int time;
 
     private void getTimeFromDB(Player p) throws SQLException{
-        try(PreparedStatement preparedStatement = database.connection.prepareStatement("SELECT PlayTime " +
+        try(PreparedStatement preparedStatement = plugin.sqLiteDatabase.connection.prepareStatement("SELECT PlayTime " +
                 "FROM PlayerData WHERE PlayerUUID = ?")) {
             preparedStatement.setString(1, p.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -29,7 +26,7 @@ public class PlayTimeTask extends BukkitRunnable {
         }
     }
     private void setTimeInDB(Player p, int t) throws SQLException{
-        try(PreparedStatement preparedStatement = database.connection.prepareStatement("UPDATE PlayerData " +
+        try(PreparedStatement preparedStatement = plugin.sqLiteDatabase.connection.prepareStatement("UPDATE PlayerData " +
                 "SET PlayTime = ? WHERE PlayerUUID = ?")) {
             preparedStatement.setInt(1, t);
             preparedStatement.setString(2, p.getUniqueId().toString());

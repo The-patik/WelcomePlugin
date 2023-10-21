@@ -2,6 +2,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,11 +13,7 @@ import java.util.List;
 
 public class ShowCreditsToCommand extends SubCommandPlayer {
 
-    private final WelcomePlugin plugin;
-
-    public ShowCreditsToCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
 
     @Override
     public String getName() {
@@ -57,7 +54,7 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
 
     @Override
     public void perform(Player player, String[] args) {
-        ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
+        ConfigurationSection cs = functions.welcomePlugin().getConfig().getConfigurationSection("settings");
 
         if (player.hasPermission(getPermissions())){
             if (args.length == 1){
@@ -74,7 +71,7 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
         }else {
             player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
-                            (player, plugin.getMessagesHandler().getMessages
+                            (player, functions.getMessagesHandler().getMessages
                                     ("command-messages", "no-permissions"))));
         }
     }

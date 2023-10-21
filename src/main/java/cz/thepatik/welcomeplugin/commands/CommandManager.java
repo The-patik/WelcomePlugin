@@ -14,32 +14,35 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class CommandManager implements CommandExecutor, TabExecutor {
-    WelcomePlugin welcomePlugin;
+    WelcomePlugin plugin;
     private CommandManager(WelcomePlugin welcomePlugin){
-        this.welcomePlugin = welcomePlugin;
+        this.plugin = welcomePlugin;
     }
     private ArrayList<SubCommandPlayer> playersubcommands = new ArrayList<>();
     private ArrayList<SubCommandConsole> consolesubcommands = new ArrayList<>();
 
     // Register all commands
     public CommandManager(){
-        playersubcommands.add(new UpdateCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new VersionCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new HelpCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new PlayedTimeCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new PlayerJoinsCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new ReloadConfigCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new SentMessagesCommand(WelcomePlugin.getPlugin()));
+        playersubcommands.add(new UpdateCommand());
+        playersubcommands.add(new VersionCommand());
+        playersubcommands.add(new HelpCommand());
+        playersubcommands.add(new ShowCreditsToCommand());
+        playersubcommands.add(new PlayedTimeCommand());
+        playersubcommands.add(new PlayerJoinsCommand());
+        playersubcommands.add(new ReloadConfigCommand());
+        playersubcommands.add(new SentMessagesCommand());
+        playersubcommands.add(new SetJoinMessageCommand());
+        playersubcommands.add(new ReloadMessagesCommand());
 
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.HelpCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayedTimeCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayerJoinsCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand(WelcomePlugin.getPlugin()));
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.HelpCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayedTimeCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayerJoinsCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SetJoinMessageCommand());
     }
 
     @Override

@@ -3,6 +3,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.console;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Server;
@@ -15,11 +16,7 @@ import java.util.List;
 
 public class ShowCreditsToCommand extends SubCommandConsole {
 
-    private final WelcomePlugin plugin;
-
-    public ShowCreditsToCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
 
     @Override
     public String getName() {
@@ -60,7 +57,7 @@ public class ShowCreditsToCommand extends SubCommandConsole {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
+        ConfigurationSection cs = functions.welcomePlugin().getConfig().getConfigurationSection("settings");
 
         Server server = sender.getServer();
 

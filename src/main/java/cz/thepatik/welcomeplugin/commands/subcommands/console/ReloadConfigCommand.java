@@ -3,6 +3,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.console;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -14,10 +15,8 @@ import java.util.List;
 
 public class ReloadConfigCommand extends SubCommandConsole {
 
-    WelcomePlugin plugin;
-    public ReloadConfigCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
+
     @Override
     public String getName() {
         return "reloadconfig";
@@ -52,7 +51,7 @@ public class ReloadConfigCommand extends SubCommandConsole {
     public void perform(CommandSender sender, String[] args) {
         Server server = sender.getServer();
 
-        plugin.saveConfig();
+        functions.welcomePlugin().saveConfig();
 
         server.getLogger().info("The plugin was successfully reloaded!");
 

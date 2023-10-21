@@ -3,38 +3,84 @@ package cz.thepatik.welcomeplugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
+import cz.thepatik.welcomeplugin.database.MySQLDatabase;
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
+import cz.thepatik.welcomeplugin.utils.Functions;
+import cz.thepatik.welcomeplugin.utils.handlers.MessagesHandler;
 import cz.thepatik.welcomeplugin.utils.handlers.PlaceholdersHandler;
 import cz.thepatik.welcomeplugin.utils.Updater;
-import cz.thepatik.welcomeplugin.utils.handlers.MessagesHandler;
 import cz.thepatik.welcomeplugin.utils.handlers.ReloadHandler;
 import cz.thepatik.welcomeplugin.utils.listeners.PlayerListener;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Objects;
+import java.util.Scanner;
 
 public final class WelcomePlugin extends JavaPlugin {
     private static WelcomePlugin plugin;
-    public static SQLiteDatabase database;
-    private MessagesHandler messagesHandler;
+    Functions functions = new Functions();
+    public SQLiteDatabase sqLiteDatabase;
+    public MySQLDatabase mySQLDatabase;
+    public ConfigurationSection settingsSection = getConfig().getConfigurationSection("settings");
 
     @Override
     public void onEnable() {
 
         plugin = this;
 
+        MessagesHandler messagesHandler = new MessagesHandler(this);
+
+        File config = new File(getDataFolder() + "/config.yml");
+        File messages = new File(getDataFolder() + "/messages.yml");
+
         // Plugin startup logic
-        this.saveDefaultConfig();
 
-        // Initialize MessageHandler
-        messagesHandler = new MessagesHandler(this);
-
+        // Register messages.yml and config.yml if not exists
+        if (!config.exists()) {
+            saveDefaultConfig();
+        }
+        if (!messages.exists()) {
+            new MessagesHandler(this);
+        }
         // Initialize Updater
         Updater updater = new Updater(this, 112870);
 
-        //Check ProtocolLibs
+        // Check if data folder exists
+        File dataFolder = new File(getDataFolder() + "/data");
+        if (!dataFolder.exists()) {
+            dataFolder.mkdirs();
+        }
+
+        // Load database
+        if (databaseType().equals("sqlite")) {
+            try {
+                sqLiteDatabase = new SQLiteDatabase(getDataFolder().getAbsolutePath() + "/data/database.db");
+            } catch (SQLException e) {
+                getLogger().severe("Connection to SQLite database failed!" + e);
+                Bukkit.getPluginManager().disablePlugin(this);
+            }
+        } else if (databaseType().equals("mysql")){
+            try {
+                mySQLDatabase = functions.mySQLDatabase();
+                mySQLDatabase.getConnection();
+                mySQLDatabase.initializeDatabase();
+            } catch (SQLException e){
+                getLogger().severe("Connection to MySQL database failed!" + e);
+            }
+        }
+
+        // Check ProtocolLibs
         if (getServer().getPluginManager().getPlugin("ProtocolLib") == null) {
             getLogger().warning("This plugin needs ProtocolLib in order to work!");
             getLogger().warning("Disabling the plugin...");
@@ -45,7 +91,7 @@ public final class WelcomePlugin extends JavaPlugin {
             getLogger().warning("Disabling the plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
-            //Check version
+            // Check version
             if (updater.checkForUpdates()) {
                 getLogger().info("The plugin is up to date!");
             } else {
@@ -54,46 +100,91 @@ public final class WelcomePlugin extends JavaPlugin {
                 getLogger().info("Updated version: " + updater.getNewVersion());
             }
 
-            //Register commands
+            // Register commands
             getCommand("welcome").setExecutor(new CommandManager());
 
-            //Register ProtocolLib
+            // Register ProtocolLib
             ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
             // Register Placeholders
             new PlaceholdersHandler(this).register();
 
-            //Register Handlers
-            Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+            // Register Handlers
+            Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
             Bukkit.getPluginManager().registerEvents(new ReloadHandler(), this);
 
-            String currentPluginVersion = getConfig().getString("plugin-version");
-
-            //Set version in config
-            if (!getUpdater().getPluginVersion().equals(this.getConfig().getString("plugin-version"))) {
-                getLogger().info("Plugin has been updated from " + currentPluginVersion + " to new version: " + getUpdater().getPluginVersion());
-                this.getConfig().set("plugin-version", getUpdater().getPluginVersion());
-                this.saveConfig();
+            String timeStamp = new SimpleDateFormat("HH-mm").format(Calendar.getInstance().getTime());
+            File version = new File(getDataFolder(), "/data/version");
+            if (!version.exists()){
+                try {
+                    version.createNewFile();
+                    FileWriter writer = new FileWriter(version);
+                    writer.write(getUpdater().getPluginVersion());
+                    writer.close();
+                } catch (IOException e) {
+                    getLogger().severe("Could not create version!");
+                    e.printStackTrace();
+                }
             }
-
-            //Check if data folder exists
-            File dataFolder = new File(getDataFolder() + "/data");
-            if (!dataFolder.exists()) {
-                dataFolder.mkdirs();
-            }
-
-            //Load database
+            String pluginVersion = "";
             try {
-                database = new SQLiteDatabase(getDataFolder().getAbsolutePath() + "/data/database.db");
-            } catch (SQLException e) {
-                getLogger().severe("Connection to database failed!" + e);
-                Bukkit.getPluginManager().disablePlugin(this);
+                Scanner sc = new Scanner(version);
+                 pluginVersion = sc.nextLine();
+                 sc.close();
+            } catch (FileNotFoundException e) {
+                getLogger().severe("Could not check plugin version!");
+                e.printStackTrace();
             }
 
-            // Check missingColumns after update
-            database.checkMissingColumns();
+            //Set new version if is
+            if (!getUpdater().getPluginVersion().equals(pluginVersion)) {
 
-            //Finally the plugin is loaded...
+                // Write version in version file
+                try {
+                    FileWriter writer = new FileWriter(version);
+                    writer.write(getUpdater().getPluginVersion());
+                    writer.close();
+                } catch (IOException e) {
+                    getLogger().severe("Could not change plugin version!");
+                    e.printStackTrace();
+                }
+
+                // Create backup folder
+                File backup = new File(getDataFolder() + "/backup");
+                if (!backup.exists()) {
+                    backup.mkdirs();
+                }
+
+                // Backup messages
+                File messagesCopy = new File(backup, "/messages-backup-"+ timeStamp + ".yml");
+                try {
+                    Files.copy(messages.toPath(), messagesCopy.toPath());
+                    Files.delete(messages.toPath());
+                    new MessagesHandler(this);
+                } catch (Exception e){
+                    getLogger().severe("Could not create backup of messages.yml");
+                    e.printStackTrace();
+                }
+
+                // Backup messages
+                File configCopy = new File(backup, "/config-backup-"+ timeStamp + ".yml");
+                try {
+                    Files.copy(config.toPath(), configCopy.toPath());
+                    Files.delete(config.toPath());
+                    saveDefaultConfig();
+                } catch (Exception e){
+                    getLogger().severe("Could not create backup of config.yml");
+                    e.printStackTrace();
+                }
+
+                // Check missingColumns after update
+                if (databaseType().equals("sqlite")) {
+                    sqLiteDatabase.checkMissingColumns();
+                } else if (databaseType().equals("mysql")) {
+                    mySQLDatabase.checkMissingColumns();
+                }
+            }
+            // Finally the plugin is loaded...
             getLogger().info("The plugin is loaded!");
         }
     }
@@ -104,23 +195,21 @@ public final class WelcomePlugin extends JavaPlugin {
         getLogger().info("The plugin was successfully unloaded!");
 
         try {
-            database.closeConnection();
+            sqLiteDatabase.closeConnection();
+            mySQLDatabase.closeConnection();
         }catch (Exception e){
             getLogger().severe("Database connection was closed...");
         }
         getLogger().info("Database connection was closed...");
     }
-
     public static WelcomePlugin getPlugin(){
         return plugin;
     }
-
-    public MessagesHandler getMessagesHandler(){
-        return messagesHandler;
-    }
-
     public Updater getUpdater(){
         return new Updater(this, 112870);
+    }
+    public String databaseType(){
+        return settingsSection.getString("use-database-type");
     }
 
 }

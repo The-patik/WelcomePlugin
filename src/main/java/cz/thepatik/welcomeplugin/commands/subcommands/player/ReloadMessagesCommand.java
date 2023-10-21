@@ -10,26 +10,26 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-public class SentMessagesCommand extends SubCommandPlayer {
+public class ReloadMessagesCommand extends SubCommandPlayer {
     Functions functions = new Functions();
     @Override
     public String getName() {
-        return "sentmessages";
+        return "reloadmessages";
     }
 
     @Override
     public String getPermissions() {
-        return "welcomeplugin.sentmessages";
+        return "welcomeplugin.reloadmessages";
     }
 
     @Override
     public String getDescription() {
-        return "Shows how many messages you sent";
+        return "Reloads the messages config file";
     }
 
     @Override
     public String getSyntax() {
-        return "/welcome sentmessages";
+        return "/welcome reloadmessages";
     }
 
     @Override
@@ -45,15 +45,14 @@ public class SentMessagesCommand extends SubCommandPlayer {
     @Override
     public void perform(Player player, String[] args) {
         if (player.hasPermission(getPermissions())){
-            player.sendMessage(ChatColor.translateAlternateColorCodes
-                    ('&', PlaceholderAPI.setPlaceholders
-                            (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "sent-messages"))));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
+                            .getMessages("command-messages", "reloadmessages-command"))));
+            functions.getMessagesHandler().reloadConfig(WelcomePlugin.getPlugin());
         } else {
-            player.sendMessage(ChatColor.translateAlternateColorCodes
-                    ('&', PlaceholderAPI.setPlaceholders
-                            (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "no-permissions"))));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
+                            .getMessages("command-messages", "no-permissions"))));
         }
     }
 }

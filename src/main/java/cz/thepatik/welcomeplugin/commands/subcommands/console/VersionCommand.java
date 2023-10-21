@@ -3,6 +3,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.console;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -17,10 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class VersionCommand extends SubCommandConsole {
-    WelcomePlugin plugin;
-    public VersionCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
+
     @Override
     public String getName() {
         return "version";
@@ -54,10 +53,10 @@ public class VersionCommand extends SubCommandConsole {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Server server = sender.getServer();
-        if (plugin.getUpdater().checkForUpdates()) {
-            server.getLogger().info("You are running WelcomePlugin v" + plugin.getUpdater().getPluginVersion());
+        if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
+            server.getLogger().info("You are running WelcomePlugin v" + functions.welcomePlugin().getUpdater().getPluginVersion());
         } else {
-            server.getLogger().info("You are running WelcomePlugin v" + plugin.getUpdater().getPluginVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + functions.welcomePlugin().getUpdater().getPluginVersion());
             server.getLogger().info("But this version is old... For more info run /welcome update");
         }
     }

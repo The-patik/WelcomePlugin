@@ -2,6 +2,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,10 +15,7 @@ import static cz.thepatik.welcomeplugin.utils.PlayerChecker.isPlayerOnline;
 
 public class PlayerJoinsCommand extends SubCommandPlayer {
 
-    WelcomePlugin plugin;
-    public PlayerJoinsCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
 
     @Override
     public String getName() {
@@ -58,32 +56,30 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
 
     @Override
     public void perform(Player player, String[] args) {
-            if (player.hasPermission(getPermissions()) && args.length == 1) {
+
+        if (player.hasPermission(getPermissions()) && args.length == 1) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
-                                (player, plugin.getMessagesHandler().getMessages
+                                (player, functions.getMessagesHandler().getMessages
                                         ("command-messages", "player-joins"))));
-            } else if (player.hasPermission(getPermissions()) && args.length == 2) {
+        } else if (player.hasPermission(getPermissions()) && args.length == 2) {
                 if (isPlayerOnline(args[1])) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes
                             ('&', PlaceholderAPI.setPlaceholders
-                                    (player, plugin.getMessagesHandler()
+                                    (player, functions.getMessagesHandler()
                                             .getMessages("command-messages", "other-player-joins")
                                             .replace("$1", args[1]))));
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes
                             ('&', PlaceholderAPI.setPlaceholders
-                                    (player, plugin.getMessagesHandler().getMessages
+                                    (player, functions.getMessagesHandler().getMessages
                                             ("command-messages", "player-not-online"))));
                 }
-            } else {
+        } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
-                                (player, plugin.getMessagesHandler().getMessages
+                                (player, functions.getMessagesHandler().getMessages
                                         ("command-messages", "no-permissions"))));
-            }
-        /*/ } else if (sender instanceof ConsoleCommandSender){
-            plugin.getLogger().info("This command can issue only players!");
-        }/*/
+        }
     }
 }

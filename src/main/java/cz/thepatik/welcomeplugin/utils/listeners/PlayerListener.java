@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.tasks.PlayTimeTask;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -22,16 +23,11 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
-import static cz.thepatik.welcomeplugin.WelcomePlugin.database;
-
-
 public class PlayerListener implements Listener {
-    private HashMap<UUID, BukkitTask> tasks = new HashMap<>();
-    private final WelcomePlugin plugin;
+    private final HashMap<UUID, BukkitTask> tasks = new HashMap<>();
 
-    public PlayerListener(WelcomePlugin plugin) {
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
+    WelcomePlugin plugin = functions.welcomePlugin();
 
     public void displayCredits(Player player) {
         PacketContainer useBed = new PacketContainer(PacketType.Play.Server.GAME_STATE_CHANGE);
@@ -47,87 +43,91 @@ public class PlayerListener implements Listener {
 
         Player p = statusEvent.getPlayer();
 
-        if (statusEvent.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED){
-            statusEvent.getPlayer().kickPlayer("You did not accept required resource pack");
+        if (statusEvent.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED) {
+            // Check for settings if kick player enabled and kick player when resource pack declined
+            if (plugin.settingsSection.getBoolean("check-for-resource-pack")) {
+                statusEvent.getPlayer().kickPlayer("You did not accept required resource pack");
+            }
         } else if (statusEvent.getStatus() == PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD) {
-            statusEvent.getPlayer().kickPlayer("Resource pack download failed!");
-        } else if(statusEvent.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED){
+            // Check for settings if kick player enabled and kick player when failed resource pack download
+            if (plugin.settingsSection.getBoolean("check-for-resource-pack")) {
+                statusEvent.getPlayer().kickPlayer("Resource pack download failed!");
+            }
+        } else if (statusEvent.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED) {
             if (Objects.equals(configShowCredits, "newcomers")) {
                 if (!p.hasPlayedBefore()) {
                     displayCredits(statusEvent.getPlayer());
                 }
             } else if (Objects.equals(configShowCredits, "everyone")) {
                 displayCredits(statusEvent.getPlayer());
-            } else if (Objects.equals(configShowCredits, "nobody")) {
+            } else {
+                plugin.getLogger().severe("You set wrong setting in show-credits! Check it!");
             }
         }
-
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws SQLException {
         Player p = event.getPlayer();
 
-        ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
+        functions.getTitleUtils().sendWelcomeTitle(p);
 
-        String mainTitleMessage = plugin.getMessagesHandler().getMessages("ingame-messages","main-title-message");
-        String subTitleMessage = plugin.getMessagesHandler().getMessages("ingame-messages","subtitle-message");
-        String firstTimePlayerChatMessage = plugin.getMessagesHandler().getMessages("ingame-messages","first-time-player-chat-message");
-        String welcomePlayerChatMessage = plugin.getMessagesHandler().getMessages("ingame-messages","welcome-player-chat-message");
+        // Check if counters are enabled
+        if (plugin.settingsSection.getBoolean("enable-counters")) {
 
-        //Make PlaceholderAPI do its job
-        mainTitleMessage = PlaceholderAPI.setPlaceholders(event.getPlayer(), mainTitleMessage);
-        subTitleMessage = PlaceholderAPI.setPlaceholders(event.getPlayer(), subTitleMessage);
+            // Check if SQLite database
+            if (plugin.databaseType().equals("sqlite")) {
 
-        if (cs.getBoolean("enable-titles")) {
-            p.sendTitle(ChatColor.translateAlternateColorCodes
-                    ('&', mainTitleMessage),
-                    ChatColor.translateAlternateColorCodes
-                            ('&', subTitleMessage), 20, 100, 20);
-        }
-        if (cs.getBoolean("enable-first-time-chat-message")){
-            if (!p.hasPlayedBefore()) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes
-                        ('&', PlaceholderAPI.setPlaceholders
-                                (p, firstTimePlayerChatMessage)));
+                // Writing player to database if not exists
+                if (!(functions.sqLitePlayerFunctions().playerExists(p))) {
+                    functions.sqLitePlayerFunctions().addPlayer(p);
+                }
+                // If player exists in database add join counter
+                if (functions.sqLitePlayerFunctions().playerExists(p)) {
+                    functions.sqLitePlayerFunctions().addPlayerJoin(p);
+                    BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
+                    tasks.put(p.getUniqueId(), playerTimeTask);
+                }
+                // Check if database MySQL
+            } else if (plugin.databaseType().equals("mysql")) {
+
+                // Writing player to database if not exists
+                if (!(functions.mysqlPlayerFunctions().playerExists(p))) {
+                    functions.mysqlPlayerFunctions().addPlayer(p);
+                }
+                // If player exists in database add join counter
+                if (functions.mysqlPlayerFunctions().playerExists(p)) {
+                    functions.mysqlPlayerFunctions().addPlayerJoin(p);
+                    BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
+                    tasks.put(p.getUniqueId(), playerTimeTask);
+                }
             }
         }
-
-        if (cs.getBoolean("enable-welcome-chat-message")){
-            if (p.hasPlayedBefore()) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes
-                        ('&', PlaceholderAPI.setPlaceholders
-                                (p, welcomePlayerChatMessage)));
-            }
-        }
-
-        //Writing player to database if not exists
-        if (!(database.playerExists(p))) {
-            database.addPlayer(p);
-        }
-        //If player exists in database add join counter
-        if (database.playerExists(p)) {
-            database.addPlayerJoin(p);
-            BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
-            tasks.put(p.getUniqueId(), playerTimeTask);
-        }
+        // Send join message
+        functions.getMessageUtils().sendJoinMessage(p);
     }
 
     @EventHandler
     public void onPlayerDisconnect(PlayerQuitEvent event) {
         Player p = event.getPlayer();
-        BukkitTask playerTimeTask = tasks.remove(p.getUniqueId());
-        if (playerTimeTask != null) {
-            playerTimeTask.cancel();
+
+        // Stop counting played time on player disconnect
+        if (plugin.settingsSection.getBoolean("enable-counters")) {
+            BukkitTask playerTimeTask = tasks.remove(p.getUniqueId());
+            if (playerTimeTask != null) {
+                playerTimeTask.cancel();
+            }
         }
+        // Send leave message
+        functions.getMessageUtils().sendLeaveMessage(p);
     }
 
     @EventHandler
-    public void onPlayerMessage(AsyncPlayerChatEvent event){
-        Player player = event.getPlayer();
+    public void onPlayerMessage(AsyncPlayerChatEvent event) {
+        Player p = event.getPlayer();
 
-        database.addMessagesSent(player);
-
+        // Add new message to db
+        functions.getMessageUtils().addMessageToDatabase(p);
     }
 
 }

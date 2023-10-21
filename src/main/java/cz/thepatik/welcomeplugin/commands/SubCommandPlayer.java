@@ -1,11 +1,11 @@
 package cz.thepatik.welcomeplugin.commands;
 
+import cz.thepatik.welcomeplugin.utils.Functions;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
 public abstract class SubCommandPlayer {
-
     public abstract String getName();
     public abstract String getPermissions();
     public abstract String getDescription();

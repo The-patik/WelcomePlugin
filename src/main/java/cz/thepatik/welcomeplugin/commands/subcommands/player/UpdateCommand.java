@@ -2,6 +2,7 @@ package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -14,10 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class UpdateCommand extends SubCommandPlayer {
-    WelcomePlugin plugin;
-    public UpdateCommand(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
     @Override
     public String getName() {
         return "update";
@@ -52,7 +50,7 @@ public class UpdateCommand extends SubCommandPlayer {
     public void perform(Player player, String[] args) {
         if (player.hasPermission(getPermissions())) {
 
-            if (plugin.getUpdater().checkForUpdates()) {
+            if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
 
                 player.sendMessage("The plugin is up to date!");
 
@@ -70,15 +68,15 @@ public class UpdateCommand extends SubCommandPlayer {
                 spigotOpenURL.setBold(false);
 
                 player.spigot().sendMessage(welcomeUpdateMessage, spigotOpenURL);
-                player.sendMessage(ChatColor.GREEN + "You are running WelcomePlugin v" + ChatColor.GOLD + plugin.getUpdater().getPluginVersion());
-                player.sendMessage(ChatColor.GREEN + "The new version is WelcomePlugin v" + ChatColor.GOLD + plugin.getUpdater().getNewVersion());
+                player.sendMessage(ChatColor.GREEN + "You are running WelcomePlugin v" + ChatColor.GOLD + functions.welcomePlugin().getUpdater().getPluginVersion());
+                player.sendMessage(ChatColor.GREEN + "The new version is WelcomePlugin v" + ChatColor.GOLD + functions.welcomePlugin().getUpdater().getNewVersion());
 
             }
         } else {
 
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
-                            (player, plugin.getMessagesHandler().getMessages
+                            (player, functions.getMessagesHandler().getMessages
                                     ("command-messages", "no-permissions"))));
 
         }
