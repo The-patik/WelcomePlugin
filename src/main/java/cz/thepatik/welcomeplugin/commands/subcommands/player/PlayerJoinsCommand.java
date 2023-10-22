@@ -64,7 +64,7 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, plugin.getMessagesHandler().getMessages
                                         ("command-messages", "player-joins"))));
-            } else if (player.hasPermission(getPermissions()) && args.length == 2 && player.hasPermission("welcomeplugin.playerjoins.other")) {
+            } else if (player.hasPermission(getPermissions()) && args.length == 2 && player.hasPermission("welcomeplugin.playerjoins.others")) {
                 if (isPlayerOnline(args[1])) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes
                             ('&', PlaceholderAPI.setPlaceholders
