@@ -70,12 +70,6 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) throws SQLException {
         Player p = event.getPlayer();
 
-        // Send join message
-        event.setJoinMessage(functions.getMessageUtils().sendJoinMessage(p));
-
-        // Send welcome title
-        functions.getTitleUtils().sendWelcomeTitle(p);
-
         // Check if counters are enabled
         if (plugin.settingsSection.getBoolean("enable-counters")) {
 
@@ -113,6 +107,13 @@ public class PlayerListener implements Listener {
                 }
             }
         }
+
+        // Send join message
+        event.setJoinMessage(functions.getMessageUtils().sendJoinMessage(p));
+
+        // Send welcome title
+        functions.getTitleUtils().sendWelcomeTitle(p);
+
     }
 
     @EventHandler

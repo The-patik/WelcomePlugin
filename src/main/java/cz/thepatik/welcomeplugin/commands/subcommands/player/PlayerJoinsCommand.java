@@ -45,7 +45,7 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
     public List<String> tabComplete(Player player, String[] args) {
         List<String> completions = new ArrayList<>();
 
-        if (args.length == 1){
+        if (args.length == 1 && player.hasPermission("welcomeplugin.playerjoins.others")){
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()){
                 completions.add(onlinePlayer.getName());
             }
