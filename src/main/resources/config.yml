@@ -1,32 +1,18 @@
-# Please, be patient, the plugin is still in development, and it is possible you will lose
-# your config during updates, so backup it before update.
+#Please, be patient, the plugin is still in development, and it is possible you will lose
+#your config during updates, so backup it before update.
 #
-# This plugin supports PlaceholderAPI!
+#This plugin supports PlaceholderAPI!
 
 settings:
-  # Show credits for newcomers or to everyone
-  # SET ONLY newcomers OR everyone OR nobody
+  #Show credits for newcomers or to everyone
+  #SET ONLY newcomers OR everyone OR nobody
   show-credits: newcomers
 
-  # Enable titles
+  #Enable titles
   enable-titles: true
 
-  # Enable chat welcome message on player first join
   enable-first-time-chat-message: true
 
-  # Enable welcome message
   enable-welcome-chat-message: true
-
-  use-database: sqlite
-
-mysql-settings:
-
-  db-host-and-port: localhost:3306
-
-  db-name: database_Name
-
-  db-username: userName
-
-  db-password: dbPasswd
 
 plugin-version:
