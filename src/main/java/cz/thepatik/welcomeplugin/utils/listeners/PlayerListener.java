@@ -70,6 +70,10 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) throws SQLException {
         Player p = event.getPlayer();
 
+        // Send join message
+        event.setJoinMessage(functions.getMessageUtils().sendJoinMessage(p));
+
+        // Send welcome title
         functions.getTitleUtils().sendWelcomeTitle(p);
 
         // Check if counters are enabled
@@ -81,6 +85,9 @@ public class PlayerListener implements Listener {
                 // Writing player to database if not exists
                 if (!(functions.sqLitePlayerFunctions().playerExists(p))) {
                     functions.sqLitePlayerFunctions().addPlayer(p);
+                    functions.sqLitePlayerFunctions().addPlayerJoin(p);
+                    BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
+                    tasks.put(p.getUniqueId(), playerTimeTask);
                 }
                 // If player exists in database add join counter
                 if (functions.sqLitePlayerFunctions().playerExists(p)) {
@@ -94,6 +101,9 @@ public class PlayerListener implements Listener {
                 // Writing player to database if not exists
                 if (!(functions.mysqlPlayerFunctions().playerExists(p))) {
                     functions.mysqlPlayerFunctions().addPlayer(p);
+                    functions.mysqlPlayerFunctions().addPlayerJoin(p);
+                    BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
+                    tasks.put(p.getUniqueId(), playerTimeTask);
                 }
                 // If player exists in database add join counter
                 if (functions.mysqlPlayerFunctions().playerExists(p)) {
@@ -103,8 +113,6 @@ public class PlayerListener implements Listener {
                 }
             }
         }
-        // Send join message
-        functions.getMessageUtils().sendJoinMessage(p);
     }
 
     @EventHandler
@@ -119,7 +127,7 @@ public class PlayerListener implements Listener {
             }
         }
         // Send leave message
-        functions.getMessageUtils().sendLeaveMessage(p);
+        event.setQuitMessage(functions.getMessageUtils().sendLeaveMessage(p));;
     }
 
     @EventHandler

@@ -12,11 +12,11 @@ import java.util.List;
 
 import static cz.thepatik.welcomeplugin.utils.PlayerChecker.isPlayerOnline;
 
-public class SetJoinMessageCommand extends SubCommandConsole {
+public class SetLeaveMessageCommand extends SubCommandConsole {
     Functions functions = new Functions();
     @Override
     public String getName() {
-        return "setjoinmessage";
+        return "setleavemessage";
     }
 
     @Override
@@ -26,12 +26,12 @@ public class SetJoinMessageCommand extends SubCommandConsole {
 
     @Override
     public String getDescription() {
-        return "Set join message for player";
+        return "Set leave message for player";
     }
 
     @Override
     public String getSyntax() {
-        return "/welcome setjoinmessage <toWho> <message>";
+        return "/welcome setleavemessage <toWho> <message>";
     }
 
     @Override
@@ -48,20 +48,19 @@ public class SetJoinMessageCommand extends SubCommandConsole {
     public void perform(CommandSender sender, String[] args) {
         int newArguments = args.length - 3;
         String[] messageArgs = new String[newArguments];
-        String joinMessage = "";
+        String leaveMessage = "";
 
         if (args.length == 1){
             sender.getServer().getLogger().info("You can change message of player that is online!");
-            sender.getServer().getLogger().info("Usage: /welcome setjoinmessage <playerName> <message with space>");
+            sender.getServer().getLogger().info("Usage: /welcome setleavemessage <playerName> <message with space>");
         } else if (args.length >= 2 && !isPlayerOnline(args[1])) {
             sender.getServer().getLogger().info("Player " + args[1] + " is not online, or does not exists!");
         } else if (args.length >2 && isPlayerOnline(args[1])) {
-            messageArgs = Arrays.copyOfRange(args, 2, args.length);
-            joinMessage = String.join(" ", messageArgs);
             String argsPlayer = args[1];
+            messageArgs = Arrays.copyOfRange(args, 2, args.length);
+            leaveMessage = String.join(" ", messageArgs);
 
             if (functions.welcomePlugin().databaseType().equals("sqlite")) {
-
                 // Check if player is really online
                 Arrays.sort(args);
                 if (Arrays.binarySearch(args, argsPlayer) >= 0) {
@@ -69,11 +68,10 @@ public class SetJoinMessageCommand extends SubCommandConsole {
                     // Args into player
                     Player p = Bukkit.getPlayer(argsPlayer);
                     // Set player join message
-                    functions.sqLitePlayerFunctions().setPlayerJoinMessage(p, joinMessage);
+                    functions.sqLitePlayerFunctions().setPlayerLeaveMessage(p, leaveMessage);
 
                 }
             } else if (functions.welcomePlugin().databaseType().equals("mysql")){
-
                 // Check if player is really online
                 Arrays.sort(args);
                 if (Arrays.binarySearch(args, argsPlayer) >= 0) {
@@ -81,13 +79,13 @@ public class SetJoinMessageCommand extends SubCommandConsole {
                     // Args into player
                     Player p = Bukkit.getPlayer(argsPlayer);
                     // Set player join message
-                    functions.mysqlPlayerFunctions().setPlayerJoinMessage(p, joinMessage);
+                    functions.mysqlPlayerFunctions().setPlayerLeaveMessage(p, leaveMessage);
 
                 }
             }
 
             functions.welcomePlugin().getLogger()
-                    .info("Successfully changed join message of player " + argsPlayer);
+                    .info("Successfully changed leave message of player " + argsPlayer);
 
         }
     }

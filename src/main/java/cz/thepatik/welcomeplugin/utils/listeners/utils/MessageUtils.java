@@ -10,7 +10,7 @@ public class MessageUtils {
     Functions functions = new Functions();
 
     // JOIN MESSAGES LOGIC
-    public void sendJoinMessage(Player p){
+    public String sendJoinMessage(Player p){
         // Check if join messages are enabled
         if (functions.welcomePlugin().settingsSection.getBoolean("enable-join-messages")) {
             // Check if custom player join messages are enabled
@@ -19,32 +19,33 @@ public class MessageUtils {
                 if (functions.welcomePlugin().databaseType().equals("sqlite")) {
                     // Check if player has permission and has own join message
                     if (p.hasPermission("welcomeplugin.custom-message") && functions.sqLitePlayerFunctions().hasOwnJoinMessage(p)) {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p, ChatColor.translateAlternateColorCodes('&',
-                                functions.sqLitePlayerFunctions().getPlayerJoinMessage(p))));
+                        return PlaceholderAPI.setPlaceholders(p, ChatColor.translateAlternateColorCodes('&',
+                                functions.sqLitePlayerFunctions().getPlayerJoinMessage(p)));
                     } else {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p, ChatColor.translateAlternateColorCodes('&',
+                        return PlaceholderAPI.setPlaceholders(p, ChatColor.translateAlternateColorCodes('&',
                                 functions.getMessagesHandler().getMessages("ingame-messages",
-                                        "player-join-message"))));
+                                        "player-join-message")));
                     }
                 } else if (functions.welcomePlugin().databaseType().equals("mysql")) {
                     if (p.hasPermission("welcomeplugin.custom-message") && functions.mysqlPlayerFunctions().hasOwnJoinMessage(p)) {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
-                                functions.mysqlPlayerFunctions().getPlayerJoinMessage(p))));
+                        return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                                functions.mysqlPlayerFunctions().getPlayerJoinMessage(p)));
                     } else {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                        return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
                                 functions.getMessagesHandler().getMessages("ingame-messages",
-                                        "player-join-message"))));
+                                        "player-join-message")));
                     }
                 }
             } else {
-                Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
                         functions.getMessagesHandler().getMessages("ingame-messages",
-                                "player-join-message"))));
+                                "player-join-message")));
             }
         }
+        return null;
     }
     // LEAVE MESSAGES LOGIC
-    public void sendLeaveMessage(Player p){
+    public String sendLeaveMessage(Player p){
         // Check if join messages are enabled
         if (functions.welcomePlugin().settingsSection.getBoolean("enable-leave-messages")) {
             // Check if custom player join messages are enabled
@@ -53,29 +54,30 @@ public class MessageUtils {
                 if (functions.welcomePlugin().databaseType().equals("sqlite")) {
                     // Check if player has permission and has own join message
                     if (p.hasPermission("welcomeplugin.custom-message") && functions.sqLitePlayerFunctions().hasOwnLeaveMessage(p)) {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
-                                functions.sqLitePlayerFunctions().getPlayerLeaveMessage(p))));
+                        return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                                functions.sqLitePlayerFunctions().getPlayerLeaveMessage(p)));
                     } else {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                        return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
                                 functions.getMessagesHandler().getMessages("ingame-messages",
-                                        "player-leave-message"))));
+                                        "player-leave-message")));
                     }
                 } else if (functions.welcomePlugin().databaseType().equals("mysql")) {
                     if (p.hasPermission("welcomeplugin.custom-message") && functions.mysqlPlayerFunctions().hasOwnLeaveMessage(p)) {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
-                                functions.mysqlPlayerFunctions().getPlayerLeaveMessage(p))));
+                        return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                                functions.mysqlPlayerFunctions().getPlayerLeaveMessage(p)));
                     } else {
-                        Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                        return(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
                                 functions.getMessagesHandler().getMessages("ingame-messages",
                                         "player-leave-message"))));
                     }
                 }
             } else {
-                Bukkit.broadcastMessage(PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
+                return PlaceholderAPI.setPlaceholders(p,ChatColor.translateAlternateColorCodes('&',
                         functions.getMessagesHandler().getMessages("ingame-messages",
-                                "player-leave-message"))));
+                                "player-leave-message")));
             }
         }
+        return null;
     }
     // ADD MESSAGE TO DATABASE
     public void addMessageToDatabase(Player p){

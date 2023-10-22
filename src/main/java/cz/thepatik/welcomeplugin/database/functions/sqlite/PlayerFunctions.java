@@ -2,6 +2,8 @@ package cz.thepatik.welcomeplugin.database.functions.sqlite;
 
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.utils.Functions;
+import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -12,6 +14,7 @@ public class PlayerFunctions {
     Functions functions = new Functions();
     SQLiteDatabase sqlite = functions.sqLiteDatabase();
 
+    // Add player to database
     public void addPlayer(Player p) throws SQLException{
         try(PreparedStatement preparedStatement = sqlite.connection.prepareStatement("INSERT INTO PlayerData" +
                 " (PlayerUUID, PlayerName) VALUES (?, ?)")) {
@@ -20,6 +23,8 @@ public class PlayerFunctions {
             preparedStatement.executeUpdate();
         }
     }
+
+    // Check if player exists in database
     public boolean playerExists(Player p) throws SQLException{
         try(PreparedStatement preparedStatement = sqlite.connection.prepareStatement("SELECT * FROM PlayerData WHERE PlayerUUID = ?")) {
             preparedStatement.setString(1, p.getUniqueId().toString());
@@ -27,6 +32,8 @@ public class PlayerFunctions {
             return resultSet.next();
         }
     }
+
+    // Add +1 to PlayerJoins
     public void addPlayerJoin(Player p){
         try {
             PreparedStatement preparedStatement = sqlite.connection.prepareStatement("SELECT PlayerJoins" +
@@ -45,6 +52,8 @@ public class PlayerFunctions {
             throw new RuntimeException(e);
         }
     }
+
+    // Add +1 to MessagesSent
     public void addMessagesSent(Player p){
         try {
             PreparedStatement preparedStatement = sqlite.connection.prepareStatement("SELECT SentMessages" +
@@ -64,6 +73,8 @@ public class PlayerFunctions {
             throw new RuntimeException(e);
         }
     }
+
+    // Check if player has own join message
     public boolean hasOwnJoinMessage(Player p){
         boolean hasJoinMessage = false;
         try {
@@ -72,9 +83,7 @@ public class PlayerFunctions {
             preparedStatement.setString(1, p.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             int numberJoinMessage = resultSet.getInt("HasOwnJoinMessage");
-            if (numberJoinMessage == 0){
-                hasJoinMessage = false;
-            } else if (numberJoinMessage == 1){
+            if (numberJoinMessage == 1){
                 hasJoinMessage = true;
             }
         } catch (SQLException e){
@@ -82,6 +91,8 @@ public class PlayerFunctions {
         }
         return hasJoinMessage;
     }
+
+    // Check if player has own leave message
     public boolean hasOwnLeaveMessage(Player p){
         boolean hasLeaveMessage = false;
         try {
@@ -90,9 +101,7 @@ public class PlayerFunctions {
             preparedStatement.setString(1, p.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             int numberJoinMessage = resultSet.getInt("HasOwnLeaveMessage");
-            if (numberJoinMessage == 0){
-                hasLeaveMessage = false;
-            } else if (numberJoinMessage == 1){
+            if (numberJoinMessage == 1){
                 hasLeaveMessage = true;
             }
         } catch (SQLException e){
@@ -100,6 +109,8 @@ public class PlayerFunctions {
         }
         return hasLeaveMessage;
     }
+
+    // Get players join message
     public String getPlayerJoinMessage(Player p){
         String playerMessage = "";
         try {
@@ -113,6 +124,8 @@ public class PlayerFunctions {
         }
         return playerMessage;
     }
+
+    // Get players leave message
     public String getPlayerLeaveMessage(Player p){
         String playerMessage = "";
         try {
@@ -125,5 +138,71 @@ public class PlayerFunctions {
             throw  new RuntimeException(e);
         }
         return playerMessage;
+    }
+
+    // Set players join message
+    public void setPlayerJoinMessage(Player p, String message){
+        try {
+            PreparedStatement preparedStatement = sqlite.connection.prepareStatement("UPDATE PlayerData "
+                    + "SET PlayerJoinMessage = ? WHERE PlayerUUID = ?");
+            preparedStatement.setString(1, message);
+            preparedStatement.setString(2, p.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement1 = sqlite.connection.prepareStatement("UPDATE PlayerData "
+                    + "SET HasOwnJoinMessage = ? WHERE PlayerUUID = ?");
+            preparedStatement1.setInt(1, 1);
+            preparedStatement1.setString(2, p.toString());
+            preparedStatement1.executeUpdate();
+        } catch (SQLException e) {
+            functions.welcomePlugin().getLogger().severe("There was a problem with setting " + p.getDisplayName() + "'s join message!");
+            e.printStackTrace();
+        }
+    }
+
+    // Set player leave message
+    public void setPlayerLeaveMessage(Player p, String message){
+        try {
+            PreparedStatement preparedStatement = sqlite.connection.prepareStatement("UPDATE PlayerData "
+                    + "SET PlayerLeaveMessage = ? WHERE PlayerUUID = ?");
+            preparedStatement.setString(1, message);
+            preparedStatement.setString(2, p.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement1 = sqlite.connection.prepareStatement("UPDATE PlayerData "
+                    + "SET HasOwnLeaveMessage = ? WHERE PlayerUUID = ?");
+            preparedStatement1.setInt(1, 1);
+            preparedStatement1.setString(2, p.getUniqueId().toString());
+            preparedStatement1.executeUpdate();
+        } catch (SQLException e) {
+            functions.welcomePlugin().getLogger().severe("There was a problem with setting " + p.getDisplayName() + "'s leave message!");
+            e.printStackTrace();
+        }
+    }
+
+    // Remove player join message
+    public void removePlayerJoinMessage(Player p){
+        try {
+            PreparedStatement preparedStatement = sqlite.connection.prepareStatement("UPDATE PlayerData "
+                    + "SET HasOwnJoinMessage = ? WHERE PlayerUUID = ?");
+            preparedStatement.setInt(1, 0);
+            preparedStatement.setString(2, p.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            functions.welcomePlugin().getLogger().severe("There was a problem with setting " + p.getDisplayName() + "'s join message!");
+            e.printStackTrace();
+        }
+    }
+
+    // Remove player leave message
+    public void removePlayerLeaveMessage(Player p){
+        try {
+            PreparedStatement preparedStatement = sqlite.connection.prepareStatement("UPDATE PlayerData "
+                    + "SET HasOwnLeaveMessage = ? WHERE PlayerUUID = ?");
+            preparedStatement.setInt(1, 0);
+            preparedStatement.setString(2, p.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            functions.welcomePlugin().getLogger().severe("There was a problem with setting " + p.getDisplayName() + "'s leave message!");
+            e.printStackTrace();
+        }
     }
 }

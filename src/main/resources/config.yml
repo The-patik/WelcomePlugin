@@ -39,12 +39,14 @@ settings:
   enable-counters: true
 
   # Set what database type you want to use - mysql or sqlite
-  use-database-type: sqlite
+  database-type: sqlite
 
 # If use-database is mysql, setup this!
 mysql-settings:
 
-  db-host-and-port: localhost:3306
+  db-host: localhost
+
+  db-port: 3306
 
   db-name: databaseName
 

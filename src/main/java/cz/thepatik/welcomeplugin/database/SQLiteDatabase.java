@@ -1,7 +1,5 @@
 package cz.thepatik.welcomeplugin.database;
 
-import org.bukkit.entity.Player;
-
 import java.sql.*;
 
 public class SQLiteDatabase {
@@ -14,7 +12,9 @@ public class SQLiteDatabase {
             statement.execute("CREATE TABLE IF NOT EXISTS PlayerData " +
                     "(PlayerID INTEGER PRIMARY KEY AUTOINCREMENT, PlayerUUID varchar(255)," +
                     " PlayerName varchar(225), PlayTime int NOT NULL DEFAULT 0," +
-                    " PlayerJoins int NOT NULL DEFAULT 0, SentMessages int NOT NULL DEFAULT 0);");
+                    " PlayerJoins int NOT NULL DEFAULT 0, SentMessages int NOT NULL DEFAULT 0," +
+                    " HasOwnJoinMessage int NOT NULL DEFAULT 0, PlayerJoinMessage varchar(255)," +
+                    " HasOwnLeaveMessage int NOT NULL DEFAULT 0, PlayerLeaveMessage varchar(255))");
         }
     }
     public void closeConnection() throws SQLException {

@@ -70,7 +70,8 @@ public final class WelcomePlugin extends JavaPlugin {
                 getLogger().severe("Connection to SQLite database failed!" + e);
                 Bukkit.getPluginManager().disablePlugin(this);
             }
-        } else if (databaseType().equals("mysql")){
+        }
+        if (databaseType().equals("mysql")){
             try {
                 mySQLDatabase = functions.mySQLDatabase();
                 mySQLDatabase.getConnection();
@@ -176,13 +177,13 @@ public final class WelcomePlugin extends JavaPlugin {
                     getLogger().severe("Could not create backup of config.yml");
                     e.printStackTrace();
                 }
-
-                // Check missingColumns after update
-                if (databaseType().equals("sqlite")) {
-                    sqLiteDatabase.checkMissingColumns();
-                } else if (databaseType().equals("mysql")) {
-                    mySQLDatabase.checkMissingColumns();
-                }
+            }
+            // Check missingColumns after update
+            if (databaseType().equals("sqlite")) {
+                sqLiteDatabase.checkMissingColumns();
+            }
+            if (databaseType().equals("mysql")) {
+                mySQLDatabase.checkMissingColumns();
             }
             // Finally the plugin is loaded...
             getLogger().info("The plugin is loaded!");
@@ -194,11 +195,18 @@ public final class WelcomePlugin extends JavaPlugin {
         // Plugin shutdown logic
         getLogger().info("The plugin was successfully unloaded!");
 
-        try {
-            sqLiteDatabase.closeConnection();
-            mySQLDatabase.closeConnection();
-        }catch (Exception e){
-            getLogger().severe("Database connection was closed...");
+        if (databaseType().equals("sqlite")) {
+            try {
+                sqLiteDatabase.closeConnection();
+            } catch (Exception e) {
+                getLogger().severe("Database connection was closed...");
+            }
+        } else if (databaseType().equals("mysql")){
+            try{
+                mySQLDatabase.closeConnection();
+            }catch (Exception e) {
+                getLogger().severe("Database connection was closed...");
+            }
         }
         getLogger().info("Database connection was closed...");
     }
@@ -209,7 +217,7 @@ public final class WelcomePlugin extends JavaPlugin {
         return new Updater(this, 112870);
     }
     public String databaseType(){
-        return settingsSection.getString("use-database-type");
+        return settingsSection.getString("database-type");
     }
 
 }

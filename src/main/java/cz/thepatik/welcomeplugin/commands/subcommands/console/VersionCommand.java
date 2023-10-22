@@ -1,18 +1,9 @@
 package cz.thepatik.welcomeplugin.commands.subcommands.console;
 
-import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
-import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import cz.thepatik.welcomeplugin.utils.Functions;
-import me.clip.placeholderapi.PlaceholderAPI;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;

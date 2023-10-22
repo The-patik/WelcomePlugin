@@ -1,6 +1,5 @@
 package cz.thepatik.welcomeplugin.commands.subcommands.player;
 
-import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -43,7 +42,7 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
     }
 
     @Override
-    public List<String> tabComplete(String[] args) {
+    public List<String> tabComplete(Player player, String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1){

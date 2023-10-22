@@ -1,19 +1,20 @@
 package cz.thepatik.welcomeplugin.database;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 import java.sql.*;
 
 public class MySQLDatabase {
-    WelcomePlugin plugin = new WelcomePlugin();
+    Functions functions = new Functions();
+    WelcomePlugin plugin = functions.welcomePlugin();
     ConfigurationSection cs = null;
 
-    private ConfigurationSection getConfig(){
+    private ConfigurationSection getConfigSection(){
         if (cs == null) {
             try {
-                ConfigurationSection cs = plugin.getConfig().getConfigurationSection("mysql-settings");
+                cs = plugin.getConfig().getConfigurationSection("mysql-settings");
             } catch (NullPointerException e) {
                 plugin.getLogger().severe("Error while getting config!" + e);
             }
@@ -22,16 +23,17 @@ public class MySQLDatabase {
     }
 
     public Connection connection;
-    private final String host_port = getConfig().getString("db-host-and-port");;
-    private final String database = getConfig().getString("db-name");
-    private final String username = getConfig().getString("db-username");
-    private final String passwd = getConfig().getString("db-password");
+    private final String host = getConfigSection().getString("db-host");
+    private final String port = getConfigSection().getString("db-port");
+    private final String database = getConfigSection().getString("db-name");
+    private final String username = getConfigSection().getString("db-username");
+    private final String passwd = getConfigSection().getString("db-password");
 
     public Connection getConnection(){
         if (connection == null){
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://" + host_port + "/" + database, username, passwd);
+                connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, passwd);
             } catch (ClassNotFoundException | SQLException e ){
                 plugin.getLogger().severe("There was an error while connecting to mysql database!" + e);
             }
@@ -44,7 +46,9 @@ public class MySQLDatabase {
             statement.execute("CREATE TABLE IF NOT EXISTS PlayerData " +
                     "(PlayerID int NOT NULL AUTO_INCREMENT, PlayerUUID varchar(255)," +
                     " PlayerName varchar(225), PlayTime int NOT NULL DEFAULT 0," +
-                    " PlayerJoins int NOT NULL DEFAULT 0, SentMessages int NOT NULL DEFAULT 0);");
+                    " PlayerJoins int NOT NULL DEFAULT 0, SentMessages int NOT NULL DEFAULT 0," +
+                    " HasOwnJoinMessage int NOT NULL DEFAULT 0, PlayerJoinMessage varchar(255)," +
+                    " HasOwnLeaveMessage int NOT NULL DEFAULT 0, PlayerLeaveMessage varchar(255));");
         }
     }
     public void closeConnection(){

@@ -1,13 +1,9 @@
 package cz.thepatik.welcomeplugin.commands.subcommands.console;
 
-import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
-import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import cz.thepatik.welcomeplugin.utils.placeholders.PlayerJoins;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

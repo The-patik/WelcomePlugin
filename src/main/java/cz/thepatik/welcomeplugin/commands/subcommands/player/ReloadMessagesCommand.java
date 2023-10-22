@@ -38,7 +38,7 @@ public class ReloadMessagesCommand extends SubCommandPlayer {
     }
 
     @Override
-    public List<String> tabComplete(String[] args) {
+    public List<String> tabComplete(Player player, String[] args) {
         return Collections.emptyList();
     }
 

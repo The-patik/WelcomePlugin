@@ -1,9 +1,6 @@
 package cz.thepatik.welcomeplugin.commands.subcommands.console;
 
-import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.commands.CommandManager;
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
-import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;

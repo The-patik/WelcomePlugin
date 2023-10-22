@@ -13,10 +13,14 @@ public class TitleUtils {
     public void sendWelcomeTitle(Player p){
         ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
 
-        String mainTitleMessage = functions.getMessagesHandler().getMessages("ingame-messages", "main-title-message");
-        String subTitleMessage = functions.getMessagesHandler().getMessages("ingame-messages", "subtitle-message");
-        String firstTimePlayerChatMessage = functions.getMessagesHandler().getMessages("ingame-messages", "first-time-player-chat-message");
-        String welcomePlayerChatMessage = functions.getMessagesHandler().getMessages("ingame-messages", "welcome-player-chat-message");
+        String mainTitleMessage = functions.getMessagesHandler()
+                .getMessages("ingame-messages", "main-title-message");
+        String subTitleMessage = functions.getMessagesHandler()
+                .getMessages("ingame-messages", "subtitle-message");
+        String firstTimePlayerChatMessage = functions.getMessagesHandler()
+        .getMessages("ingame-messages", "first-time-player-chat-message");
+        String welcomePlayerChatMessage = functions.getMessagesHandler()
+                .getMessages("ingame-messages", "welcome-player-chat-message");
 
         //Make PlaceholderAPI do its job
         mainTitleMessage = PlaceholderAPI.setPlaceholders(p, mainTitleMessage);

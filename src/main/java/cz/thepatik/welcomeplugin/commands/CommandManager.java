@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -18,8 +19,8 @@ public class CommandManager implements CommandExecutor, TabExecutor {
     private CommandManager(WelcomePlugin welcomePlugin){
         this.plugin = welcomePlugin;
     }
-    private ArrayList<SubCommandPlayer> playersubcommands = new ArrayList<>();
-    private ArrayList<SubCommandConsole> consolesubcommands = new ArrayList<>();
+    private final ArrayList<SubCommandPlayer> playersubcommands = new ArrayList<>();
+    private final ArrayList<SubCommandConsole> consolesubcommands = new ArrayList<>();
 
     // Register all commands
     public CommandManager(){
@@ -32,6 +33,9 @@ public class CommandManager implements CommandExecutor, TabExecutor {
         playersubcommands.add(new ReloadConfigCommand());
         playersubcommands.add(new SentMessagesCommand());
         playersubcommands.add(new SetJoinMessageCommand());
+        playersubcommands.add(new SetLeaveMessageCommand());
+        playersubcommands.add(new RemoveJoinMessageCommand());
+        playersubcommands.add(new RemoveLeaveMessageCommand());
         playersubcommands.add(new ReloadMessagesCommand());
 
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand());
@@ -43,10 +47,13 @@ public class CommandManager implements CommandExecutor, TabExecutor {
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SetJoinMessageCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SetLeaveMessageCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.RemoveJoinMessageCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.RemoveLeaveMessageCommand());
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
         String command = cmd.toString();
         if (sender instanceof Player){
             // Run command if sender is a player
@@ -77,9 +84,9 @@ public class CommandManager implements CommandExecutor, TabExecutor {
             }
         } else if (sender instanceof ConsoleCommandSender) {
             if (args.length > 0){
-                for (int i = 0; i < getConsolesubcommands().size(); i++){
-                    if (args[0].equalsIgnoreCase(getConsolesubcommands().get(i).getName())) {
-                        getConsolesubcommands().get(i).perform(sender, args);
+                for (int i = 0; i < getConsoleSubcommands().size(); i++){
+                    if (args[0].equalsIgnoreCase(getConsoleSubcommands().get(i).getName())) {
+                        getConsoleSubcommands().get(i).perform(sender, args);
                     }
                 }
             } else if (args.length == 0) {
@@ -97,13 +104,13 @@ public class CommandManager implements CommandExecutor, TabExecutor {
         return playersubcommands;
     }
 
-    public ArrayList<SubCommandConsole> getConsolesubcommands() {
+    public ArrayList<SubCommandConsole> getConsoleSubcommands() {
         return consolesubcommands;
     }
 
     // Tab complete logic
     @Override
-    public ArrayList<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args){
+    public ArrayList<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args){
         ArrayList<String> completions = new ArrayList<>();
 
         if (args.length == 1){
@@ -120,12 +127,11 @@ public class CommandManager implements CommandExecutor, TabExecutor {
                     break;
                 }
             }
-
-            if (subCommand != null) {
+            if (subCommand != null && sender instanceof Player player) {
                 // Autocomplete suggestions for subcommand arguments
                 String[] subArgs = new String[args.length - 1];
                 System.arraycopy(args, 1, subArgs, 0, subArgs.length);
-                completions.addAll(subCommand.tabComplete(subArgs));
+                completions.addAll(subCommand.tabComplete((Player) sender, subArgs));
             }
         }
 
