@@ -68,6 +68,19 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) throws SQLException {
         Player p = event.getPlayer();
 
+        //Writing player to database if not exists
+        if (!database.playerExists(p)) {
+            database.addPlayer(p);
+            BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
+            tasks.put(p.getUniqueId(), playerTimeTask);
+        }
+        //If player exists in database add join counter
+        if (database.playerExists(p)) {
+            database.addPlayerJoin(p);
+            BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
+            tasks.put(p.getUniqueId(), playerTimeTask);
+        }
+
         ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
 
         String mainTitleMessage = plugin.getMessagesHandler().getMessages("ingame-messages","main-title-message");
@@ -99,17 +112,6 @@ public class PlayerListener implements Listener {
                         ('&', PlaceholderAPI.setPlaceholders
                                 (p, welcomePlayerChatMessage)));
             }
-        }
-
-        //Writing player to database if not exists
-        if (!(database.playerExists(p))) {
-            database.addPlayer(p);
-        }
-        //If player exists in database add join counter
-        if (database.playerExists(p)) {
-            database.addPlayerJoin(p);
-            BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
-            tasks.put(p.getUniqueId(), playerTimeTask);
         }
     }
 

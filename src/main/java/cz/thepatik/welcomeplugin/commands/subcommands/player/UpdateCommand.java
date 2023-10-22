@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ public class UpdateCommand extends SubCommandPlayer {
     }
 
     @Override
-    public String getPermissions() {
+    public @NotNull String getPermissions() {
         return "welcomeplugin.update";
     }
 
@@ -44,7 +45,7 @@ public class UpdateCommand extends SubCommandPlayer {
     }
 
     @Override
-    public List<String> tabComplete(String[] args) {
+    public List<String> tabComplete(Player p, String[] args) {
         return Collections.emptyList();
     }
 

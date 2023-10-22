@@ -5,6 +5,7 @@ import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ReloadConfigCommand extends SubCommandPlayer {
     }
 
     @Override
-    public String getPermissions() {
+    public @NotNull String getPermissions() {
         return "welcomeplugin.reload";
     }
 
@@ -41,7 +42,7 @@ public class ReloadConfigCommand extends SubCommandPlayer {
     }
 
     @Override
-    public List<String> tabComplete(String[] args) {
+    public List<String> tabComplete(Player p, String[] args) {
         return Collections.emptyList();
     }
 

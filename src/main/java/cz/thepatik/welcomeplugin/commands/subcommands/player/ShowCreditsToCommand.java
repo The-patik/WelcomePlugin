@@ -6,6 +6,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
     }
 
     @Override
-    public String getPermissions() {
+    public @NotNull String getPermissions() {
         return "welcomeplugin.showcreditsto";
     }
 
@@ -44,7 +45,7 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
     }
 
     @Override
-    public List<String> tabComplete(String[] args) {
+    public List<String> tabComplete(Player p, String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1){

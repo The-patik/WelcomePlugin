@@ -6,6 +6,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
     }
 
     @Override
-    public String getPermissions() {
+    public @NotNull String getPermissions() {
         return "welcomeplugin.playerjoins";
     }
 
@@ -45,10 +46,10 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
     }
 
     @Override
-    public List<String> tabComplete(String[] args) {
+    public List<String> tabComplete(Player p, String[] args) {
         List<String> completions = new ArrayList<>();
 
-        if (args.length == 1){
+        if (args.length == 1 && p.hasPermission("welcomeplugin.playerjoins.others")){
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()){
                 completions.add(onlinePlayer.getName());
             }
@@ -63,7 +64,7 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, plugin.getMessagesHandler().getMessages
                                         ("command-messages", "player-joins"))));
-            } else if (player.hasPermission(getPermissions()) && args.length == 2) {
+            } else if (player.hasPermission(getPermissions()) && args.length == 2 && player.hasPermission("welcomeplugin.playerjoins.other")) {
                 if (isPlayerOnline(args[1])) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes
                             ('&', PlaceholderAPI.setPlaceholders

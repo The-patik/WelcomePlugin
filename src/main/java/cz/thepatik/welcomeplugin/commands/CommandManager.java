@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -18,32 +19,32 @@ public class CommandManager implements CommandExecutor, TabExecutor {
     private CommandManager(WelcomePlugin welcomePlugin){
         this.welcomePlugin = welcomePlugin;
     }
-    private ArrayList<SubCommandPlayer> playersubcommands = new ArrayList<>();
-    private ArrayList<SubCommandConsole> consolesubcommands = new ArrayList<>();
+    private final ArrayList<SubCommandPlayer> playerSubcommands = new ArrayList<>();
+    private final ArrayList<SubCommandConsole> consoleSubcommands = new ArrayList<>();
 
     // Register all commands
     public CommandManager(){
-        playersubcommands.add(new UpdateCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new VersionCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new HelpCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new PlayedTimeCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new PlayerJoinsCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new ReloadConfigCommand(WelcomePlugin.getPlugin()));
-        playersubcommands.add(new SentMessagesCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new UpdateCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new VersionCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new HelpCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new ShowCreditsToCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new PlayedTimeCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new PlayerJoinsCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new ReloadConfigCommand(WelcomePlugin.getPlugin()));
+        playerSubcommands.add(new SentMessagesCommand(WelcomePlugin.getPlugin()));
 
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.HelpCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayedTimeCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayerJoinsCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand(WelcomePlugin.getPlugin()));
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.HelpCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayedTimeCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayerJoinsCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand(WelcomePlugin.getPlugin()));
+        consoleSubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand(WelcomePlugin.getPlugin()));
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String label, String[] args) {
         String command = cmd.toString();
         if (sender instanceof Player){
             // Run command if sender is a player
@@ -74,9 +75,9 @@ public class CommandManager implements CommandExecutor, TabExecutor {
             }
         } else if (sender instanceof ConsoleCommandSender) {
             if (args.length > 0){
-                for (int i = 0; i < getConsolesubcommands().size(); i++){
-                    if (args[0].equalsIgnoreCase(getConsolesubcommands().get(i).getName())) {
-                        getConsolesubcommands().get(i).perform(sender, args);
+                for (int i = 0; i < getConsoleSubcommands().size(); i++){
+                    if (args[0].equalsIgnoreCase(getConsoleSubcommands().get(i).getName())) {
+                        getConsoleSubcommands().get(i).perform(sender, args);
                     }
                 }
             } else if (args.length == 0) {
@@ -91,45 +92,60 @@ public class CommandManager implements CommandExecutor, TabExecutor {
     }
 
     public ArrayList<SubCommandPlayer> getPlayerSubcommands(){
-        return playersubcommands;
+        return playerSubcommands;
     }
 
-    public ArrayList<SubCommandConsole> getConsolesubcommands() {
-        return consolesubcommands;
+    public ArrayList<SubCommandConsole> getConsoleSubcommands() {
+        return consoleSubcommands;
     }
 
     // Tab complete logic
     @Override
-    public ArrayList<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args){
+    public ArrayList<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args) {
         ArrayList<String> completions = new ArrayList<>();
 
-        if (args.length == 1){
-            // Find subcommand
-            for (int i = 0; i < getPlayerSubcommands().size(); i++){
-                completions.add(getPlayerSubcommands().get(i).getName());
-            }
-        } else if (args.length >= 2) {
-            // Find corresponding subcommand
-            SubCommandPlayer subCommand = null;
-            for (SubCommandPlayer sc : playersubcommands) {
-                if (sc.getName().equalsIgnoreCase(args[0])) {
-                    subCommand = sc;
-                    break;
+        if (sender instanceof Player) {
+            Player p = (Player) sender;
+            if (args.length == 1) {
+                // Find subcommand
+                for (int i = 0; i < getPlayerSubcommands().size(); i++) {
+                    if (p.hasPermission(getPlayerSubcommands().get(i).getPermissions())) {
+                        completions.add(getPlayerSubcommands().get(i).getName());
+                    }
+                }
+            } else if (args.length >= 2) {
+                // Find corresponding subcommand
+                SubCommandPlayer subCommand = null;
+                for (SubCommandPlayer sc : playerSubcommands) {
+                    if (sc.getName().equalsIgnoreCase(args[0]) && p.hasPermission(sc.getPermissions())) {
+                        subCommand = sc;
+                        break;
+                    }
+                }
+
+                if (subCommand != null) {
+
+                    // Autocomplete suggestions for subcommand arguments
+                    String[] subArgs = new String[args.length - 1];
+                    System.arraycopy(args, 1, subArgs, 0, subArgs.length);
+                    completions.addAll(subCommand.tabComplete(p, subArgs));
+
                 }
             }
 
-            if (subCommand != null) {
-                // Autocomplete suggestions for subcommand arguments
-                String[] subArgs = new String[args.length - 1];
-                System.arraycopy(args, 1, subArgs, 0, subArgs.length);
-                completions.addAll(subCommand.tabComplete(subArgs));
-            }
+            // Filter and return autocomplete suggestions based on what the user has typed
+            String currentArg = args[args.length - 1].toLowerCase();
+            completions.removeIf(suggestion -> !suggestion.toLowerCase().startsWith(currentArg));
         }
-
-        // Filter and return autocomplete suggestions based on what the user has typed
-        String currentArg = args[args.length - 1].toLowerCase();
-        completions.removeIf(suggestion -> !suggestion.toLowerCase().startsWith(currentArg));
-
         return completions;
+    }
+
+    public String getPlayerSubcommandPermissions(){
+        String permission = null;
+        for (SubCommandPlayer sc : playerSubcommands) {
+            permission = sc.getPermissions();
+            break;
+        }
+        return permission;
     }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+# v1.0.1
+* Repaired player without permissions can see tab complete
+* Repaired players without op can not use commands
+* Added new permissions into player joins - see wiki
+* Repaired 0 player joins when player joins server first time
+
 # v1.0
 * Added messages manager and messages.yml
 * That means you can now edit almost every phrase of plugin :)
