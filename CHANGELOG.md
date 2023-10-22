@@ -1,5 +1,8 @@
 # Changelog
 
+# v1.0.2
+* Repaired wrong permissions on playerjoin command
+
 # v1.0.1
 * Repaired player without permissions can see tab complete
 * Repaired players without op can not use commands
