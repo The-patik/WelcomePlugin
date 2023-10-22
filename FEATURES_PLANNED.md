@@ -7,3 +7,4 @@
 
 ## in a longer time
 * ~~Maybe GUI menu :P~~
+* Option to change update time of player played time in database
