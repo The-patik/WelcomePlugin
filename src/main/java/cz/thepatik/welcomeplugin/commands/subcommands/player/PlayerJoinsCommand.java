@@ -61,24 +61,24 @@ public class PlayerJoinsCommand extends SubCommandPlayer {
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, functions.getMessagesHandler().getMessages
                                         ("command-messages", "player-joins"))));
-        } else if (player.hasPermission(getPermissions()) && args.length == 2) {
+        } else if (player.hasPermission(getPermissions()) && args.length == 2 && player.hasPermission("welcomeplugin.playerjoins.others")) {
                 if (isPlayerOnline(args[1])) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes
                             ('&', PlaceholderAPI.setPlaceholders
                                     (player, functions.getMessagesHandler()
-                                            .getMessages("command-messages", "other-player-joins")
+                                            .getMessages("command-messages", "others-player-joins")
                                             .replace("$1", args[1]))));
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes
                             ('&', PlaceholderAPI.setPlaceholders
                                     (player, functions.getMessagesHandler().getMessages
-                                            ("command-messages", "player-not-online"))));
+                                            ("error-messages", "player-not-online"))));
                 }
         } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, functions.getMessagesHandler().getMessages
-                                        ("command-messages", "no-permissions"))));
+                                        ("error-messages", "no-permissions"))));
         }
     }
 }

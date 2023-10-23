@@ -53,9 +53,9 @@ public class SetLeaveMessageCommand extends SubCommandConsole {
         if (args.length == 1){
             sender.getServer().getLogger().info("You can change message of player that is online!");
             sender.getServer().getLogger().info("Usage: /welcome setleavemessage <playerName> <message with space>");
-        } else if (args.length >= 2 && !isPlayerOnline(args[1])) {
+        } else if (!isPlayerOnline(args[1])) {
             sender.getServer().getLogger().info("Player " + args[1] + " is not online, or does not exists!");
-        } else if (args.length >2 && isPlayerOnline(args[1])) {
+        } else if (args.length > 2 && isPlayerOnline(args[1])) {
             String argsPlayer = args[1];
             messageArgs = Arrays.copyOfRange(args, 2, args.length);
             leaveMessage = String.join(" ", messageArgs);

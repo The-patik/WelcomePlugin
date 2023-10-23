@@ -48,8 +48,8 @@ public class VersionCommand extends SubCommandPlayer {
     @Override
     public void perform(Player player, String[] args) {
         if (player.hasPermission(getPermissions())) {
-            if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
-                player.sendMessage("The plugin version is: " + functions.welcomePlugin().getUpdater().getPluginVersion());
+            if (functions.getUpdater().checkForUpdates()) {
+                player.sendMessage("The plugin version is v" + functions.getUpdater().getPluginVersion());
             } else {
                 TextComponent updateMessage = new TextComponent("/welcome update");
                 updateMessage.setColor(net.md_5.bungee.api.ChatColor.RED);
@@ -61,14 +61,14 @@ public class VersionCommand extends SubCommandPlayer {
                 updateMessageFirst.setColor(net.md_5.bungee.api.ChatColor.RED);
                 updateMessageFirst.setBold(false);
 
-                player.sendMessage(ChatColor.GREEN + "The plugin version is: " + ChatColor.GOLD + functions.welcomePlugin().getUpdater().getPluginVersion());
+                player.sendMessage(ChatColor.GREEN + "The plugin version is v" + ChatColor.GOLD + functions.getUpdater().getPluginVersion());
                 player.spigot().sendMessage(updateMessageFirst, updateMessage);
             }
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "no-permissions"))));
+                                    ("error-messages", "no-permissions"))));
         }
     }
 }

@@ -1,5 +1,30 @@
 # Changelog
 
+# v1.1.0
+* Added reload command for messages.yml
+* Added MySQL Database
+* Added option to enable or disable count functions
+* Added option to choose if kick player when resource pack not installed
+* Added new permissions - CHECK WIKI
+* Added custom join message for every player
+* Added config and messages backup when plugin version change
+* Finally repaired update
+* New commands:
+  * /welcome setjoinmessage - you can add join message
+  * /welcome setleavemessage - you can add leave message
+  * /welcome removejoinmessage - you can remove join message
+  * /welcome removeleavemessage - you can remove leave message
+  * /welcome reloadmessages - reloads the messages.yml
+
+# v1.0.2
+* Repaired wrong permissions on playerjoin command
+
+# v1.0.1
+* Repaired player without permissions can see tab complete
+* Repaired players without op can not use commands
+* Added new permissions into player joins - see wiki
+* Repaired 0 player joins when player joins server first time
+
 # v1.0
 * Added messages manager and messages.yml
 * That means you can now edit almost every phrase of plugin :)

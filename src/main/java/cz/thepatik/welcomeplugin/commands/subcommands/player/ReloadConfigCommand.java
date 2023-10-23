@@ -49,14 +49,14 @@ public class ReloadConfigCommand extends SubCommandPlayer {
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "reloadconfig-command"))));
+                                    ("command-messages", "reload-config-command"))));
             functions.welcomePlugin().saveConfig();
             functions.welcomePlugin().reloadConfig();
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "no-permissions"))));
+                                    ("error-messages", "no-permissions"))));
         }
     }
 }

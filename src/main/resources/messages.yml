@@ -1,4 +1,5 @@
 # Here you can edit messages
+#
 # All messages supports changing of color with &
 
 ingame-messages:
@@ -14,25 +15,30 @@ ingame-messages:
 # This plugin supports PlaceholderAPI - list of placeholders: https://github.com/PlaceholderAPI/PlaceholderAPI/wiki/Placeholders
 command-messages:
   played-time: "&aYou are playing on the server for &6%WelcomePlugin_played_time%"
-  no-permissions: "&cYou do not have permissions!"
-  reloadconfig-command: "&aReloading config.yml"
-  reloadmessages-command: "&aReloading messages.yml"
+  others-played-time: "&aPlayer &6$1 is playing on the server for &6%WelcomePlugin_played_time%" # $1 is playername - DO NOT REMOVE!
   player-joins: "&aYou have joined &6%WelcomePlugin_player_joins% &atimes!"
-  other-player-joins: "&aThe player $1 has joined &6%WelcomePlugin_player_$1_joins% &atimes!" # $1 is playername - DO NOT REMOVE!
-  player-not-online: "&aThis player is not online!"
+  others-player-joins: "&aThe player $1 has joined &6%WelcomePlugin_player_$1_joins% &atimes!" # $1 is playername - DO NOT REMOVE!
   sent-messages: "&aYou sent &6%WelcomePlugin_sent_messages% &amessages!"
+  others-sent-messages: "&aYou sent &6%WelcomePlugin_sent_messages% &amessages!"
+  reload-config-command: "&aReloading config.yml"
+  reload-messages-command: "&aReloading messages.yml"
   set-join-message-no-args: "&cYou must specify a message &6- &e/welcome setjoinmessage <your message with space>"
   set-join-message-usage: "&aUsage: &e/welcome setjoinmessage <Your message>"
   set-join-message-own: "&aYou have changed your join message!"
   set-join-message-others: "&aYou have changed join message of player &6$1" # $1 is playername - DO NOT REMOVE!set-join-message-no-args: "&cYou must specify a message &6- &e/welcome setjoinmessage <your message with space>"set-join-message-usage: "&aUsage: &e/welcome setjoinmessage <Your message>"
   remove-join-message-own: "&aYou have removed your join message!"
   remove-join-message-others: "&aYou have removed join message of player &6$1" # $1 is playername - DO NOT REMOVE!set-join-message-no-args: "&cYou must specify a message &6- &e/welcome setjoinmessage <your message with space>"
-  set-leave-message-no-args: "&aUsage: &e/welcome setjoinmessage <Your message>"
-  set-leave-message-usage: "&aUsage: &e/welcome setjoinmessage <Your message>"
-  set-leave-message-own: "&aYou have changed your join message!"
-  set-leave-message-others: "&aYou have changed join message of player &6$1" # $1 is playername - DO NOT REMOVE!
+  set-leave-message-no-args: "&cYou must specify a message &6- &e/welcome setleavemessage <your message with space>"
+  set-leave-message-usage: "&aUsage: &e/welcome setleavemessage <Your message>"
+  set-leave-message-own: "&aYou have changed your leave message!"
+  set-leave-message-others: "&aYou have changed leave message of player &6$1" # $1 is playername - DO NOT REMOVE!
   remove-leave-message-own: "&aYou have removed your leave message!"
   remove-leave-message-others: "&aYou have removed leave message of player &6$1" # $1 is playername - DO NOT REMOVE!
+
+# Error messages
+error-messages:
+  no-permissions: "&cYou do not have permissions!"
+  player-not-online: "&aThis player is not online!"
 
 # Editing the time format for played time
 #

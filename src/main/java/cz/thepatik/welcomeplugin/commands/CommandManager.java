@@ -1,6 +1,5 @@
 package cz.thepatik.welcomeplugin.commands;
 
-import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.commands.subcommands.player.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -15,10 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class CommandManager implements CommandExecutor, TabExecutor {
-    WelcomePlugin plugin;
-    private CommandManager(WelcomePlugin welcomePlugin){
-        this.plugin = welcomePlugin;
-    }
     private final ArrayList<SubCommandPlayer> playersubcommands = new ArrayList<>();
     private final ArrayList<SubCommandConsole> consolesubcommands = new ArrayList<>();
 
@@ -38,18 +33,19 @@ public class CommandManager implements CommandExecutor, TabExecutor {
         playersubcommands.add(new RemoveLeaveMessageCommand());
         playersubcommands.add(new ReloadMessagesCommand());
 
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand());
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.HelpCommand());
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayedTimeCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.PlayerJoinsCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadConfigCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ReloadMessagesCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.RemoveJoinMessageCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.RemoveLeaveMessageCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SentMessagesCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SetJoinMessageCommand());
         consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.SetLeaveMessageCommand());
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.RemoveJoinMessageCommand());
-        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.RemoveLeaveMessageCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.ShowCreditsToCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.UpdateCommand());
+        consolesubcommands.add(new cz.thepatik.welcomeplugin.commands.subcommands.console.VersionCommand());
     }
 
     @Override
@@ -113,25 +109,29 @@ public class CommandManager implements CommandExecutor, TabExecutor {
     public ArrayList<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args){
         ArrayList<String> completions = new ArrayList<>();
 
-        if (args.length == 1){
-            // Find subcommand
-            for (int i = 0; i < getPlayerSubcommands().size(); i++){
-                completions.add(getPlayerSubcommands().get(i).getName());
-            }
-        } else if (args.length >= 2) {
-            // Find corresponding subcommand
-            SubCommandPlayer subCommand = null;
-            for (SubCommandPlayer sc : playersubcommands) {
-                if (sc.getName().equalsIgnoreCase(args[0])) {
-                    subCommand = sc;
-                    break;
+        if (sender instanceof Player p) {
+            if (args.length == 1) {
+                // Find subcommand
+                for (int i = 0; i < getPlayerSubcommands().size(); i++) {
+                    if (p.hasPermission(getPlayerSubcommands().get(i).getPermissions())) {
+                        completions.add(getPlayerSubcommands().get(i).getName());
+                    }
                 }
-            }
-            if (subCommand != null && sender instanceof Player player) {
-                // Autocomplete suggestions for subcommand arguments
-                String[] subArgs = new String[args.length - 1];
-                System.arraycopy(args, 1, subArgs, 0, subArgs.length);
-                completions.addAll(subCommand.tabComplete((Player) sender, subArgs));
+            } else if (args.length >= 2) {
+                // Find corresponding subcommand
+                SubCommandPlayer subCommand = null;
+                for (SubCommandPlayer sc : playersubcommands) {
+                    if (sc.getName().equalsIgnoreCase(args[0])) {
+                        subCommand = sc;
+                        break;
+                    }
+                }
+                if (subCommand != null) {
+                    // Autocomplete suggestions for subcommand arguments
+                    String[] subArgs = new String[args.length - 1];
+                    System.arraycopy(args, 1, subArgs, 0, subArgs.length);
+                    completions.addAll(subCommand.tabComplete(p, subArgs));
+                }
             }
         }
 

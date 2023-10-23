@@ -44,15 +44,15 @@ public class UpdateCommand extends SubCommandConsole {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Server server = sender.getServer();
-        if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
+        if (functions.getUpdater().checkForUpdates()) {
 
             server.getLogger().info("The plugin is up to date!");
 
             } else {
 
             server.getLogger().warning("There is an update on: https://www.spigotmc.org/resources/welcomeplugin.112870/");
-            server.getLogger().info("You are running WelcomePlugin v" + functions.welcomePlugin().getUpdater().getPluginVersion());
-            server.getLogger().info("The new version is WelcomePlugin v" + functions.welcomePlugin().getUpdater().getNewVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + functions.getUpdater().getPluginVersion());
+            server.getLogger().info("The new version is WelcomePlugin v" + functions.getUpdater().getNewVersion());
 
         }
     }

@@ -3,11 +3,14 @@ package cz.thepatik.welcomeplugin.commands.subcommands.player;
 import cz.thepatik.welcomeplugin.commands.SubCommandPlayer;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+
+import static cz.thepatik.welcomeplugin.utils.PlayerChecker.isPlayerOnline;
 
 public class PlayedTimeCommand extends SubCommandPlayer {
 
@@ -39,21 +42,41 @@ public class PlayedTimeCommand extends SubCommandPlayer {
     }
     @Override
     public List<String> tabComplete(Player player, String[] args){
-        return Collections.emptyList();
+        List<String> completions = new ArrayList<>();
+
+        if (args.length == 1 && player.hasPermission("welcomeplugin.playedtime.others")){
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()){
+                completions.add(onlinePlayer.getName());
+            }
+        }
+        return completions;
     }
     @Override
     public void perform(Player player, String[] args) {
 
-        if (player.hasPermission(getPermissions())) {
+        if (player.hasPermission(getPermissions()) && args.length == 1) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes
+                    ('&', PlaceholderAPI.setPlaceholders
+                            (player, functions.getMessagesHandler().getMessages
+                                    ("command-messages", "played-time"))));
+        } else if (player.hasPermission(getPermissions()) && args.length == 2 && player.hasPermission("welcomeplugin.playedtime.others")) {
+            if (isPlayerOnline(args[1])){
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, functions.getMessagesHandler().getMessages
-                                        ("command-messages", "played-time"))));
+                                        ("command-messages", "others-played-time")
+                                            .replace("$1", args[1]))));
+            } else {
+                player.sendMessage(ChatColor.translateAlternateColorCodes
+                        ('&', PlaceholderAPI.setPlaceholders
+                                (player, functions.getMessagesHandler().getMessages
+                                        ("error-messages", "player-not-online"))));
+            }
         } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, functions.getMessagesHandler().getMessages
-                                        ("command-messages", "no-permissions"))));
+                                        ("error-messages", "no-permissions"))));
         }
     }
 }

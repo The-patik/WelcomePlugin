@@ -53,7 +53,7 @@ public class HelpCommand extends SubCommandPlayer {
                 player.sendMessage("/welcome playedtime - Shows time you spent playing on server");
                 player.sendMessage("/welcome playerjoins - Shows how many times you joined the server");
                 player.sendMessage("/welcome playerjoins <playerName> - Shows how many times specified player joined the server");
-                player.sendMessage("/welcome showcreditsto <who> - Set config show-credits in game! For more info run without who");
+                player.sendMessage("/welcome showcreditsto <who> - Set config show-credits-to in game! For more info run without who");
                 player.sendMessage("/welcome update - Checks for updates");
                 player.sendMessage("/welcome version - Shows version of plugin");
                 player.sendMessage("");
@@ -63,7 +63,7 @@ public class HelpCommand extends SubCommandPlayer {
                 player.sendMessage(ChatColor.translateAlternateColorCodes
                         ('&', PlaceholderAPI.setPlaceholders
                                 (player, functions.getMessagesHandler().getMessages
-                                        ("command-messages", "no-permissions"))));
+                                        ("error-messages", "no-permissions"))));
             }
     }
 }

@@ -53,7 +53,7 @@ public class HelpCommand extends SubCommandConsole {
         server.getLogger().info("/welcome playedtime - Shows time you spent playing on server");
         server.getLogger().info("/welcome playerjoins - Shows how many times you joined the server");
         server.getLogger().info("/welcome playerjoins <playerName> - Shows how many times specified player joined the server");
-        server.getLogger().info("/welcome showcreditsto <who> - Set config show-credits in game! For more info run without who");
+        server.getLogger().info("/welcome showcreditsto <who> - Set config show-credits-to in game! For more info run without who");
         server.getLogger().info("/welcome update - Checks for updates");
         server.getLogger().info("/welcome version - Shows version of plugin");
         server.getLogger().info("");

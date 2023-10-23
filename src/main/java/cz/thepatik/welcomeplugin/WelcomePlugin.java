@@ -13,13 +13,9 @@ import cz.thepatik.welcomeplugin.utils.handlers.ReloadHandler;
 import cz.thepatik.welcomeplugin.utils.listeners.PlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -45,7 +41,6 @@ public final class WelcomePlugin extends JavaPlugin {
         File messages = new File(getDataFolder() + "/messages.yml");
 
         // Plugin startup logic
-
         // Register messages.yml and config.yml if not exists
         if (!config.exists()) {
             saveDefaultConfig();
@@ -91,65 +86,68 @@ public final class WelcomePlugin extends JavaPlugin {
             getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
             getLogger().warning("Disabling the plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
+        }
+        // Check version
+        if (updater.checkForUpdates()) {
+            getLogger().info("The plugin is up to date!");
         } else {
-            // Check version
-            if (updater.checkForUpdates()) {
-                getLogger().info("The plugin is up to date!");
-            } else {
-                getLogger().warning("There is a new version! Check Spigot! https://www.spigotmc.org/resources/" + updater.getProjectID());
-                getLogger().info("Plugin version: " + updater.getPluginVersion());
-                getLogger().info("Updated version: " + updater.getNewVersion());
-            }
+            getLogger().warning("There is a new version! Check Spigot! https://www.spigotmc.org/resources/" + updater.getProjectID());
+            getLogger().info("Plugin version: " + updater.getPluginVersion());
+            getLogger().info("Updated version: " + updater.getNewVersion());
+        }
 
-            // Register commands
-            getCommand("welcome").setExecutor(new CommandManager());
+        // Register commands
+        getCommand("welcome").setExecutor(new CommandManager());
 
-            // Register ProtocolLib
-            ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        // Register ProtocolLib
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
-            // Register Placeholders
-            new PlaceholdersHandler(this).register();
+        // Register Placeholders
+        new PlaceholdersHandler().register();
 
-            // Register Handlers
-            Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-            Bukkit.getPluginManager().registerEvents(new ReloadHandler(), this);
+        // Register Handlers
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ReloadHandler(), this);
 
-            String timeStamp = new SimpleDateFormat("HH-mm").format(Calendar.getInstance().getTime());
-            File version = new File(getDataFolder(), "/data/version");
-            if (!version.exists()){
-                try {
-                    version.createNewFile();
-                    FileWriter writer = new FileWriter(version);
-                    writer.write(getUpdater().getPluginVersion());
-                    writer.close();
-                } catch (IOException e) {
-                    getLogger().severe("Could not create version!");
-                    e.printStackTrace();
-                }
-            }
-            String pluginVersion = "";
+        // Create version file
+        String timeStamp = new SimpleDateFormat("HH_mm").format(Calendar.getInstance().getTime());
+        File version = new File(getDataFolder(), "/data/version");
+
+        if (!version.exists()){
             try {
-                Scanner sc = new Scanner(version);
-                 pluginVersion = sc.nextLine();
-                 sc.close();
-            } catch (FileNotFoundException e) {
-                getLogger().severe("Could not check plugin version!");
+                version.createNewFile();
+                FileWriter writer = new FileWriter(version);
+                writer.write("0");
+                writer.close();
+            } catch (IOException e) {
+                getLogger().severe("Could not create version!");
                 e.printStackTrace();
             }
+        }
 
-            //Set new version if is
-            if (!getUpdater().getPluginVersion().equals(pluginVersion)) {
+        String pluginVersion = "";
+        try {
+            Scanner sc = new Scanner(version);
+            pluginVersion = sc.nextLine();
+            sc.close();
+        } catch (FileNotFoundException e) {
+            getLogger().severe("Could not check plugin version!");
+            e.printStackTrace();
+        }
 
-                // Write version in version file
-                try {
-                    FileWriter writer = new FileWriter(version);
-                    writer.write(getUpdater().getPluginVersion());
-                    writer.close();
-                } catch (IOException e) {
-                    getLogger().severe("Could not change plugin version!");
-                    e.printStackTrace();
-                }
+        char configChange;
+        try {
+            Scanner sc = new Scanner(version);
+            configChange = sc.nextLine().charAt(2);
+            sc.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
+        //Set new version if is
+        if (!functions.getUpdater().getPluginVersion().equals(pluginVersion)) {
+
+            if (!Objects.equals(configChange, functions.getUpdater().getPluginVersion())){
                 // Create backup folder
                 File backup = new File(getDataFolder() + "/backup");
                 if (!backup.exists()) {
@@ -157,37 +155,47 @@ public final class WelcomePlugin extends JavaPlugin {
                 }
 
                 // Backup messages
-                File messagesCopy = new File(backup, "/messages-backup-"+ timeStamp + ".yml");
+                File messagesCopy = new File(backup, "/"+ timeStamp +"-messages-backup.yml");
                 try {
                     Files.copy(messages.toPath(), messagesCopy.toPath());
-                    Files.delete(messages.toPath());
-                    new MessagesHandler(this);
+                    plugin.saveResource("messages.yml", true);
                 } catch (Exception e){
                     getLogger().severe("Could not create backup of messages.yml");
                     e.printStackTrace();
                 }
 
                 // Backup messages
-                File configCopy = new File(backup, "/config-backup-"+ timeStamp + ".yml");
+                File configCopy = new File(backup, "/"+ timeStamp +"-config-backup.yml");
                 try {
                     Files.copy(config.toPath(), configCopy.toPath());
-                    Files.delete(config.toPath());
-                    saveDefaultConfig();
+                    plugin.saveResource("config.yml", true);
                 } catch (Exception e){
                     getLogger().severe("Could not create backup of config.yml");
                     e.printStackTrace();
                 }
+
             }
-            // Check missingColumns after update
-            if (databaseType().equals("sqlite")) {
-                sqLiteDatabase.checkMissingColumns();
+
+            // Write version in version file
+            try {
+                FileWriter writer = new FileWriter(version);
+                writer.write(functions.getUpdater().getPluginVersion());
+                writer.close();
+            } catch (IOException e) {
+                getLogger().severe("Could not change plugin version!");
+                e.printStackTrace();
             }
-            if (databaseType().equals("mysql")) {
-                mySQLDatabase.checkMissingColumns();
-            }
-            // Finally the plugin is loaded...
-            getLogger().info("The plugin is loaded!");
         }
+
+        // Check for missingColumns
+        if (databaseType().equals("sqlite")) {
+            sqLiteDatabase.checkMissingColumns();
+        }
+        if (databaseType().equals("mysql")) {
+            mySQLDatabase.checkMissingColumns();
+        }
+        // Finally the plugin is loaded...
+        getLogger().info("The plugin is loaded!");
     }
 
     @Override
@@ -212,9 +220,6 @@ public final class WelcomePlugin extends JavaPlugin {
     }
     public static WelcomePlugin getPlugin(){
         return plugin;
-    }
-    public Updater getUpdater(){
-        return new Updater(this, 112870);
     }
     public String databaseType(){
         return settingsSection.getString("database-type");

@@ -26,7 +26,7 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
 
     @Override
     public String getDescription() {
-        return "Edits config show-credits-to in-game";
+        return "Edits config show-credits-to ingame";
     }
 
     @Override
@@ -46,7 +46,6 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
         if (args.length == 1){
             completions.add("newcomers");
             completions.add("everyone");
-            completions.add("nobody");
         }
         return completions;
     }
@@ -57,13 +56,13 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
 
         if (player.hasPermission(getPermissions())){
             if (args.length == 1){
-                String toWho = cs.getString("show-credits");
+                String toWho = cs.getString("show-credits-to");
                 player.sendMessage(ChatColor.GREEN + "Now showing credits to: " + ChatColor.GOLD + toWho);
-                player.sendMessage(ChatColor.RED + "To edit you must specify to who -" + ChatColor.DARK_GREEN + " newcomers" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " everyone" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " nobody");
+                player.sendMessage(ChatColor.RED + "To edit you must specify to who -" + ChatColor.DARK_GREEN + " newcomers" + ChatColor.RED + " or" + ChatColor.DARK_GREEN + " everyone");
             } else if (args.length == 2){
                 String toWho = args[1];
 
-                cs.set("show-credits", toWho);
+                cs.set("show-credits-to", toWho);
                 player.sendMessage(ChatColor.GREEN + "Now showing credits only to " + ChatColor.GOLD + toWho);
 
             }
@@ -71,7 +70,7 @@ public class ShowCreditsToCommand extends SubCommandPlayer {
             player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "no-permissions"))));
+                                    ("error-messages", "no-permissions"))));
         }
     }
 }

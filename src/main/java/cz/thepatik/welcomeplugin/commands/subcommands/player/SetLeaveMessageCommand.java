@@ -44,7 +44,7 @@ public class SetLeaveMessageCommand extends SubCommandPlayer {
     public List<String> tabComplete(Player player, String[] args) {
         List<String> completitions = new ArrayList<>();
 
-        if (args.length == 1 && player.hasPermission("welcomeplugin.others-custom-message")){
+        if (args.length == 1 && player.hasPermission("welcomeplugin.custom-message.others")){
             for (Player playerOnline : Bukkit.getOnlinePlayers()){
                 completitions.add(playerOnline.getName());
             }
@@ -70,7 +70,7 @@ public class SetLeaveMessageCommand extends SubCommandPlayer {
             if (args.length == 1) {
 
                 // Player has permission to change others join message
-                if (player.hasPermission("welcomeplugin.others-custom-message")) {
+                if (player.hasPermission("welcomeplugin.custom-message.others")) {
                     player.sendMessage(ChatColor.GREEN
                             + "You can change your leave message, or message of player that is online!");
                     player.sendMessage(ChatColor.GREEN + "Usage: "
@@ -82,7 +82,8 @@ public class SetLeaveMessageCommand extends SubCommandPlayer {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             PlaceholderAPI.setPlaceholders(player,
                                     functions.getMessagesHandler().
-                                            getMessages("ingame-messages", "set-leave-message-usage"))));
+                                            getMessages("command-messages",
+                                                    "set-leave-message-usage"))));
 
                 }
             } else if (args.length >= 2) {
@@ -92,7 +93,7 @@ public class SetLeaveMessageCommand extends SubCommandPlayer {
                  /* Check if player has permission to change others join message
                     and if player wants to change others join message
                   */
-                if (player.hasPermission("welcomeplugin.others-custom-message") && isPlayerOnline(args[1])) {
+                if (player.hasPermission("welcomeplugin.custom-message.others") && isPlayerOnline(args[1])) {
                     messageArgs = Arrays.copyOfRange(args, 2, args.length);
                     leaveMessage = String.join(" ", messageArgs);
 
@@ -130,6 +131,24 @@ public class SetLeaveMessageCommand extends SubCommandPlayer {
                                             getMessages("command-messages",
                                                     "set-leave-message-others").replace("$1", args[1]))));
 
+                } else if (player.hasPermission("welcomeplugin.others-custom-message") && !isPlayerOnline(args[0])) {
+
+                    // If player not online, cast player not online
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            PlaceholderAPI.setPlaceholders(player,
+                                    functions.getMessagesHandler().
+                                            getMessages("error-messages",
+                                                    "player-not-online"))));
+
+                } else if (!player.hasPermission("welcomeplugin.custom-message.others") && isPlayerOnline(args[0])) {
+
+                    // No permissions message
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            PlaceholderAPI.setPlaceholders(player,
+                                    functions.getMessagesHandler().
+                                            getMessages("error-messages",
+                                                    "no-permissions"))));
+
                 } else {
 
                     // In other cases...
@@ -152,15 +171,14 @@ public class SetLeaveMessageCommand extends SubCommandPlayer {
                                     functions.getMessagesHandler().
                                             getMessages("command-messages",
                                                     "set-leave-message-own"))));
+
                 }
-            } else {
-
-                // If player doesn't have permissions
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
-                                .getMessages("ingame-messages", "no-permissions"))));
-
             }
+        } else {
+            // If player doesn't have permissions...
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
+                            .getMessages("error-messages", "no-permissions"))));
         }
     }
 }

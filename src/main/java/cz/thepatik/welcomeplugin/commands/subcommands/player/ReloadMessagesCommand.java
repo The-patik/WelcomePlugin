@@ -47,12 +47,12 @@ public class ReloadMessagesCommand extends SubCommandPlayer {
         if (player.hasPermission(getPermissions())){
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
-                            .getMessages("command-messages", "reloadmessages-command"))));
+                            .getMessages("command-messages", "reload-messages-command"))));
             functions.getMessagesHandler().reloadConfig(WelcomePlugin.getPlugin());
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
-                            .getMessages("command-messages", "no-permissions"))));
+                            .getMessages("error-messages", "no-permissions"))));
         }
     }
 }

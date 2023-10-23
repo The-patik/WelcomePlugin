@@ -1,6 +1,7 @@
 package cz.thepatik.welcomeplugin.utils.handlers;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
+import cz.thepatik.welcomeplugin.utils.Functions;
 import cz.thepatik.welcomeplugin.utils.placeholders.PlayedTime;
 import cz.thepatik.welcomeplugin.utils.placeholders.PlayerJoins;
 import cz.thepatik.welcomeplugin.utils.placeholders.SentMessages;
@@ -10,10 +11,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class PlaceholdersHandler extends PlaceholderExpansion {
-    private final WelcomePlugin plugin;
-    public PlaceholdersHandler(WelcomePlugin plugin){
-        this.plugin = plugin;
-    }
+    Functions functions = new Functions();
+    WelcomePlugin plugin = functions.welcomePlugin();
     @Override
     public @NotNull String getIdentifier() {
         return "WelcomePlugin";
@@ -26,7 +25,7 @@ public class PlaceholdersHandler extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return plugin.getUpdater().getPluginVersion();
+        return functions.getUpdater().getPluginVersion();
     }
     @Override
     public boolean persist(){

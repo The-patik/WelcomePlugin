@@ -9,7 +9,7 @@ settings:
 
   # Show credits for newcomers or to everyone
   # SET ONLY newcomers OR everyone
-  show-credits: newcomers
+  show-credits-to: newcomers
 
   # Check if resource pack was initialized, if not, kick player
   kick-when-no-resource-pack: true
@@ -26,13 +26,13 @@ settings:
   # Enable join messages
   enable-join-messages: true
 
-  # Enable join messages
+  # Enable leave messages
   enable-leave-messages: true
 
   # Enable custom player join messages - need to set true enable-join-messages!!!!
   enable-custom-join-messages: true
 
-  # Enable custom player join messages - need to set true enable-join-messages!!!!
+  # Enable custom player leave messages - need to set true enable-join-messages!!!!
   enable-custom-leave-messages: true
 
   # Enable counters

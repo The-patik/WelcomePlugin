@@ -6,8 +6,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import cz.thepatik.welcomeplugin.WelcomePlugin;
 import cz.thepatik.welcomeplugin.tasks.PlayTimeTask;
 import cz.thepatik.welcomeplugin.utils.Functions;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +37,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onResourcePackEvent(PlayerResourcePackStatusEvent statusEvent) {
         ConfigurationSection cs = plugin.getConfig().getConfigurationSection("settings");
-        String configShowCredits = cs.getString("show-credits");
+        String configShowCredits = cs.getString("show-credits-to");
 
         Player p = statusEvent.getPlayer();
 
@@ -61,7 +59,7 @@ public class PlayerListener implements Listener {
             } else if (Objects.equals(configShowCredits, "everyone")) {
                 displayCredits(statusEvent.getPlayer());
             } else {
-                plugin.getLogger().severe("You set wrong setting in show-credits! Check it!");
+                plugin.getLogger().severe("You set wrong setting in show-credits-to! Check it!");
             }
         }
     }
@@ -84,7 +82,7 @@ public class PlayerListener implements Listener {
                     tasks.put(p.getUniqueId(), playerTimeTask);
                 }
                 // If player exists in database add join counter
-                if (functions.sqLitePlayerFunctions().playerExists(p)) {
+                else if (functions.sqLitePlayerFunctions().playerExists(p)) {
                     functions.sqLitePlayerFunctions().addPlayerJoin(p);
                     BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
                     tasks.put(p.getUniqueId(), playerTimeTask);
@@ -100,7 +98,7 @@ public class PlayerListener implements Listener {
                     tasks.put(p.getUniqueId(), playerTimeTask);
                 }
                 // If player exists in database add join counter
-                if (functions.mysqlPlayerFunctions().playerExists(p)) {
+                else if (functions.mysqlPlayerFunctions().playerExists(p)) {
                     functions.mysqlPlayerFunctions().addPlayerJoin(p);
                     BukkitTask playerTimeTask = new PlayTimeTask(this, p.getPlayer()).runTaskTimer(plugin, 0, 20);
                     tasks.put(p.getUniqueId(), playerTimeTask);

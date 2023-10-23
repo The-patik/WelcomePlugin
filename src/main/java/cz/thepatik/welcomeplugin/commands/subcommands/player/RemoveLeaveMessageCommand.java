@@ -44,7 +44,7 @@ public class RemoveLeaveMessageCommand extends SubCommandPlayer {
     public List<String> tabComplete(Player player, String[] args) {
         List<String> completitions = new ArrayList<>();
 
-        if (args.length == 1 && player.hasPermission("welcomeplugin.others-custom-message")){
+        if (args.length == 1 && player.hasPermission("welcomeplugin.custom-message.others")){
             for (Player playerOnline : Bukkit.getOnlinePlayers()){
                 completitions.add(playerOnline.getName());
             }
@@ -73,7 +73,7 @@ public class RemoveLeaveMessageCommand extends SubCommandPlayer {
                                         getMessages("command-messages",
                                                 "remove-leave-message-own"))));
 
-            } else if (args.length == 2 && player.hasPermission("welcomeplugin.others-custom-message") && isPlayerOnline(args[1])) {
+            } else if (args.length == 2 && player.hasPermission("welcomeplugin.custom-message.others") && isPlayerOnline(args[1])) {
 
                 String argsPlayer = args[1];
                 if (functions.welcomePlugin().databaseType().equals("sqlite")) {
@@ -103,18 +103,28 @@ public class RemoveLeaveMessageCommand extends SubCommandPlayer {
                                         getMessages("command-messages",
                                                 "remove-leave-message-others").replace("$1", argsPlayer))));
 
-            } else if (args.length == 2 && player.hasPermission("welcomeplugin.others-custom-message") && !isPlayerOnline(args[1])){
+            } else if (args.length == 2 && player.hasPermission("welcomeplugin.custom-message.others") && !isPlayerOnline(args[1])){
 
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                         PlaceholderAPI.setPlaceholders(player,
                                 functions.getMessagesHandler().
-                                        getMessages("command-messages",
+                                        getMessages("error-messages",
                                                 "player-not-online"))));
+
+            } else if (args.length == 2 && !player.hasPermission("welcomeplugin.custom-message.others") && isPlayerOnline(args[1])) {
+
+                // No permissions message
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        PlaceholderAPI.setPlaceholders(player,
+                                functions.getMessagesHandler().
+                                        getMessages("error-messages",
+                                                "no-permissions"))));
+
             }
         } else {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
-                            .getMessages("command-messages", "no-permissions"))));
+                            .getMessages("error-messages", "no-permissions"))));
         }
     }
 }

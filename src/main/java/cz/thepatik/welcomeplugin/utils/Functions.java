@@ -33,4 +33,7 @@ public class Functions {
     public TitleUtils getTitleUtils(){
         return new TitleUtils();
     }
+    public Updater getUpdater(){
+        return new Updater(welcomePlugin(), 112870);
+    }
 }

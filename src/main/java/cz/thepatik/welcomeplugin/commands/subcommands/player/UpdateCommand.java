@@ -49,7 +49,7 @@ public class UpdateCommand extends SubCommandPlayer {
     public void perform(Player player, String[] args) {
         if (player.hasPermission(getPermissions())) {
 
-            if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
+            if (functions.getUpdater().checkForUpdates()) {
 
                 player.sendMessage("The plugin is up to date!");
 
@@ -59,7 +59,7 @@ public class UpdateCommand extends SubCommandPlayer {
                 spigotOpenURL.setColor(net.md_5.bungee.api.ChatColor.RED);
                 spigotOpenURL.setItalic(true);
                 spigotOpenURL.setBold(true);
-                spigotOpenURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/welcomeplugin.112870/"));
+                spigotOpenURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, functions.getUpdater().getResourceURL()));
                 spigotOpenURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Opens URL").create()));
 
                 TextComponent welcomeUpdateMessage = new TextComponent(ChatColor.GREEN + "There is a new version on ");
@@ -67,8 +67,8 @@ public class UpdateCommand extends SubCommandPlayer {
                 spigotOpenURL.setBold(false);
 
                 player.spigot().sendMessage(welcomeUpdateMessage, spigotOpenURL);
-                player.sendMessage(ChatColor.GREEN + "You are running WelcomePlugin v" + ChatColor.GOLD + functions.welcomePlugin().getUpdater().getPluginVersion());
-                player.sendMessage(ChatColor.GREEN + "The new version is WelcomePlugin v" + ChatColor.GOLD + functions.welcomePlugin().getUpdater().getNewVersion());
+                player.sendMessage(ChatColor.GREEN + "You are running WelcomePlugin v" + ChatColor.GOLD + functions.getUpdater().getPluginVersion());
+                player.sendMessage(ChatColor.GREEN + "The new version is WelcomePlugin v" + ChatColor.GOLD + functions.getUpdater().getNewVersion());
 
             }
         } else {
@@ -76,7 +76,7 @@ public class UpdateCommand extends SubCommandPlayer {
             player.sendMessage(ChatColor.translateAlternateColorCodes
                     ('&', PlaceholderAPI.setPlaceholders
                             (player, functions.getMessagesHandler().getMessages
-                                    ("command-messages", "no-permissions"))));
+                                    ("error-messages", "no-permissions"))));
 
         }
     }

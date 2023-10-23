@@ -25,7 +25,7 @@ public class ShowCreditsToCommand extends SubCommandConsole {
 
     @Override
     public String getDescription() {
-        return "Edits config show-credits-to in-game";
+        return "Edits config show-credits-to ingame";
     }
 
     @Override
@@ -57,13 +57,13 @@ public class ShowCreditsToCommand extends SubCommandConsole {
         Server server = sender.getServer();
 
         if (args.length == 1){
-            String toWho = cs.getString("show-credits");
+            String toWho = cs.getString("show-credits-to");
             server.getLogger().info("Now showing credits to: " + toWho);
             server.getLogger().info("To edit you must specify to who show credits! See docs!");
         } else if (args.length == 2){
             String toWho = args[1];
 
-            cs.set("show-credits", toWho);
+            cs.set("show-credits-to", toWho);
             server.getLogger().info("Now showing credits only to " + toWho);
 
         }

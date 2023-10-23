@@ -82,7 +82,8 @@ public class SetJoinMessageCommand extends SubCommandPlayer {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             PlaceholderAPI.setPlaceholders(player,
                                     functions.getMessagesHandler().
-                                            getMessages("ingame-messages", "set-join-message-usage"))));
+                                            getMessages("command-messages",
+                                                    "set-join-message-usage"))));
 
                 }
             } else if (args.length >= 2) {
@@ -136,8 +137,18 @@ public class SetJoinMessageCommand extends SubCommandPlayer {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                             PlaceholderAPI.setPlaceholders(player,
                                     functions.getMessagesHandler().
-                                            getMessages("command-messages",
+                                            getMessages("error-messages",
                                                     "player-not-online"))));
+
+                } else if (!player.hasPermission("welcomeplugin.others-custom-message") && isPlayerOnline(args[1])) {
+
+                    // No permissions message
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            PlaceholderAPI.setPlaceholders(player,
+                                    functions.getMessagesHandler().
+                                            getMessages("error-messages",
+                                                    "no-permissions"))));
+
                 } else {
 
                     // In all other cases...
@@ -157,14 +168,21 @@ public class SetJoinMessageCommand extends SubCommandPlayer {
                         functions.mysqlPlayerFunctions().setPlayerJoinMessage(player, joinMessage);
 
                     }
-                }
-            } else {
 
-                // If player doesn't have permissions...
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
-                                .getMessages("ingame-messages", "no-permissions"))));
+                    // Send success message
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            PlaceholderAPI.setPlaceholders(player,
+                                    functions.getMessagesHandler().
+                                            getMessages("command-messages", "set-join-message-own"))));
+
+                }
             }
+
+        } else {
+            // If player doesn't have permissions...
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    PlaceholderAPI.setPlaceholders(player, functions.getMessagesHandler()
+                            .getMessages("error-messages", "no-permissions"))));
         }
     }
 }

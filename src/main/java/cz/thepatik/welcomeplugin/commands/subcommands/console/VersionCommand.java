@@ -44,10 +44,10 @@ public class VersionCommand extends SubCommandConsole {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Server server = sender.getServer();
-        if (functions.welcomePlugin().getUpdater().checkForUpdates()) {
-            server.getLogger().info("You are running WelcomePlugin v" + functions.welcomePlugin().getUpdater().getPluginVersion());
+        if (functions.getUpdater().checkForUpdates()) {
+            server.getLogger().info("You are running WelcomePlugin v" + functions.getUpdater().getPluginVersion());
         } else {
-            server.getLogger().info("You are running WelcomePlugin v" + functions.welcomePlugin().getUpdater().getPluginVersion());
+            server.getLogger().info("You are running WelcomePlugin v" + functions.getUpdater().getPluginVersion());
             server.getLogger().info("But this version is old... For more info run /welcome update");
         }
     }

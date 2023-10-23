@@ -151,7 +151,7 @@ public class PlayerFunctions {
             PreparedStatement preparedStatement1 = sqlite.connection.prepareStatement("UPDATE PlayerData "
                     + "SET HasOwnJoinMessage = ? WHERE PlayerUUID = ?");
             preparedStatement1.setInt(1, 1);
-            preparedStatement1.setString(2, p.toString());
+            preparedStatement1.setString(2, p.getUniqueId().toString());
             preparedStatement1.executeUpdate();
         } catch (SQLException e) {
             functions.welcomePlugin().getLogger().severe("There was a problem with setting " + p.getDisplayName() + "'s join message!");
