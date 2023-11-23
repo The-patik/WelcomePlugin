@@ -6,6 +6,7 @@ import cz.thepatik.welcomeplugin.commands.CommandManager;
 import cz.thepatik.welcomeplugin.database.MySQLDatabase;
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.utils.Functions;
+import cz.thepatik.welcomeplugin.utils.bstats.bStats;
 import cz.thepatik.welcomeplugin.utils.handlers.MessagesHandler;
 import cz.thepatik.welcomeplugin.utils.handlers.PlaceholdersHandler;
 import cz.thepatik.welcomeplugin.utils.Updater;
@@ -36,6 +37,7 @@ public final class WelcomePlugin extends JavaPlugin {
         plugin = this;
 
         MessagesHandler messagesHandler = new MessagesHandler(this);
+        bStats bStats = new bStats(this, 20362);
 
         File config = new File(getDataFolder() + "/config.yml");
         File messages = new File(getDataFolder() + "/messages.yml");
@@ -194,6 +196,11 @@ public final class WelcomePlugin extends JavaPlugin {
         if (databaseType().equals("mysql")) {
             mySQLDatabase.checkMissingColumns();
         }
+
+        if (settingsSection.getBoolean("enable-bstats")) {
+            bStats.load();
+        }
+
         // Finally the plugin is loaded...
         getLogger().info("The plugin is loaded!");
     }

@@ -38,6 +38,9 @@ settings:
   # Enable counters
   enable-counters: true
 
+  # Enable bStats
+  enable-bstats: true
+
   # Set what database type you want to use - mysql or sqlite
   database-type: sqlite
 
