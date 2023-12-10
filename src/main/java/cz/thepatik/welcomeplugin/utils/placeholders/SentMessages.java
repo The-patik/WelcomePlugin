@@ -1,7 +1,7 @@
 package cz.thepatik.welcomeplugin.utils.placeholders;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.database.MySQLDatabase;
+import cz.thepatik.welcomeplugin.database.DatabaseHandler;
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import org.bukkit.entity.Player;
 
@@ -35,7 +35,7 @@ public class SentMessages {
             return playerMessagesSent;
         } // MySQL database
         else if (plugin.databaseType().equals("mysql")) {
-            MySQLDatabase database = plugin.mySQLDatabase;
+            DatabaseHandler database = plugin.mySQLDatabase;
 
             try {
                 PreparedStatement preparedStatement = database.getConnection().prepareStatement("SELECT SentMessages" +

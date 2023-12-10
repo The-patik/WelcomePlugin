@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.*;
 
-public class MySQLDatabase {
+public class DatabaseHandler {
     Functions functions = new Functions();
     WelcomePlugin plugin = functions.welcomePlugin();
     ConfigurationSection cs = null;
@@ -31,11 +31,17 @@ public class MySQLDatabase {
 
     public Connection getConnection(){
         if (connection == null){
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, passwd);
-            } catch (ClassNotFoundException | SQLException e ){
-                plugin.getLogger().severe("There was an error while connecting to mysql database!" + e);
+            if (plugin.settingsSection.getString("database-type").equals("mysql")) {
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, passwd);
+                } catch (ClassNotFoundException | SQLException e) {
+                    plugin.getLogger().severe("There was an error while connecting to mysql database!" + e);
+                }
+            } else if (plugin.settingsSection.getString("database-type").equals("sqlite")) {
+
+            } else {
+                plugin.getLogger().info("Wrong database type in config!");
             }
         }
         return connection;

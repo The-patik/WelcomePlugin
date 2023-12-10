@@ -1,7 +1,7 @@
 package cz.thepatik.welcomeplugin.utils;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.database.MySQLDatabase;
+import cz.thepatik.welcomeplugin.database.DatabaseHandler;
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.database.functions.mysql.PlayerFunctions;
 import cz.thepatik.welcomeplugin.utils.handlers.MessagesHandler;
@@ -12,8 +12,8 @@ public class Functions {
     public WelcomePlugin welcomePlugin(){
         return WelcomePlugin.getPlugin();
     }
-    public MySQLDatabase mySQLDatabase(){
-        return new MySQLDatabase();
+    public DatabaseHandler mySQLDatabase(){
+        return new DatabaseHandler();
     }
     public SQLiteDatabase sqLiteDatabase() {
         return welcomePlugin().sqLiteDatabase;

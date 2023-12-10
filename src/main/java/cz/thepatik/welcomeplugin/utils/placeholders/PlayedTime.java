@@ -1,7 +1,7 @@
 package cz.thepatik.welcomeplugin.utils.placeholders;
 
 import cz.thepatik.welcomeplugin.WelcomePlugin;
-import cz.thepatik.welcomeplugin.database.MySQLDatabase;
+import cz.thepatik.welcomeplugin.database.DatabaseHandler;
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import org.bukkit.entity.Player;
@@ -38,7 +38,7 @@ public class PlayedTime {
             int playTime = 0;
             String playedTime = null;
 
-            MySQLDatabase database = plugin.mySQLDatabase;
+            DatabaseHandler database = plugin.mySQLDatabase;
             try {
                 PreparedStatement preparedStatement = database.getConnection().prepareStatement("SELECT PlayTime FROM PlayerData WHERE PlayerUUID = ?");
                 preparedStatement.setString(1, p.getUniqueId().toString());

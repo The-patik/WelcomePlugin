@@ -1,3 +1,4 @@
+/**
 package cz.thepatik.welcomeplugin.tasks;
 
 import cz.thepatik.welcomeplugin.utils.Functions;
@@ -25,6 +26,7 @@ public class PlayTimeTask extends BukkitRunnable {
             time = resultSet.getInt("PlayTime");
         }
     }
+
     private void setTimeInDB(Player p, int t) throws SQLException{
         try(PreparedStatement preparedStatement = plugin.sqLiteDatabase.connection.prepareStatement("UPDATE PlayerData " +
                 "SET PlayTime = ? WHERE PlayerUUID = ?")) {
@@ -56,3 +58,4 @@ public class PlayTimeTask extends BukkitRunnable {
         }
     }
 }
+**/

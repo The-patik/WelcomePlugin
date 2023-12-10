@@ -1,9 +1,7 @@
 package cz.thepatik.welcomeplugin.database.functions.mysql;
 
-import cz.thepatik.welcomeplugin.database.MySQLDatabase;
+import cz.thepatik.welcomeplugin.database.DatabaseHandler;
 import cz.thepatik.welcomeplugin.utils.Functions;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -12,7 +10,7 @@ import java.sql.SQLException;
 
 public class PlayerFunctions {
     Functions functions = new Functions();
-    MySQLDatabase mysql = functions.mySQLDatabase();
+    DatabaseHandler mysql = functions.mySQLDatabase();
 
     // Add player into database
     public void addPlayer(Player p) throws SQLException{

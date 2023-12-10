@@ -3,7 +3,7 @@ package cz.thepatik.welcomeplugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import cz.thepatik.welcomeplugin.commands.CommandManager;
-import cz.thepatik.welcomeplugin.database.MySQLDatabase;
+import cz.thepatik.welcomeplugin.database.DatabaseHandler;
 import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import cz.thepatik.welcomeplugin.utils.bstats.bStats;
@@ -28,7 +28,7 @@ public final class WelcomePlugin extends JavaPlugin {
     private static WelcomePlugin plugin;
     Functions functions = new Functions();
     public SQLiteDatabase sqLiteDatabase;
-    public MySQLDatabase mySQLDatabase;
+    public DatabaseHandler mySQLDatabase;
     public ConfigurationSection settingsSection = getConfig().getConfigurationSection("settings");
 
     @Override

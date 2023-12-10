@@ -1,5 +1,10 @@
 # Changelog
 
+# v1.1.1
+* Added bStats
+* Changes in code
+* Added option to enable/disable bStats
+
 # v1.1.0
 * Added reload command for messages.yml
 * Added MySQL Database

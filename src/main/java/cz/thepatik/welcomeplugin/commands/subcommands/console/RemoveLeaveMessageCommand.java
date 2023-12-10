@@ -1,15 +1,11 @@
 package cz.thepatik.welcomeplugin.commands.subcommands.console;
 
 import cz.thepatik.welcomeplugin.commands.SubCommandConsole;
-import cz.thepatik.welcomeplugin.database.MySQLDatabase;
-import cz.thepatik.welcomeplugin.database.SQLiteDatabase;
 import cz.thepatik.welcomeplugin.utils.Functions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
